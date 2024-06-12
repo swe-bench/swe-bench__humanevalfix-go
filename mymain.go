@@ -5,48 +5,50 @@ import (
     "github.com/stretchr/testify/assert"
 )
 import (
-    "fmt"
-    "sort"
+    "bytes"
+    "strings"
 )
 
-// In this Kata, you have to sort an array of non-negative integers according to
-// number of ones in their binary representation in ascending order.
-// For similar number of ones, sort based on decimal value.
-// 
-// It must be implemented like this:
-// >>> SortArray([1, 5, 2, 3, 4]) == [1, 2, 3, 4, 5]
-// >>> SortArray([-2, -3, -4, -5, -6]) == [-6, -5, -4, -3, -2]
-// >>> SortArray([1, 0, 2, 3, 4]) [0, 1, 2, 3, 4]
-func SortArray(arr []int) []int {
+// Given a string s and a natural number n, you have been tasked to implement
+// a function that returns a list of all words from string s that contain exactly
+// n consonants, in order these words appear in the string s.
+// If the string s is empty then the function should return an empty list.
+// Note: you may assume the input string contains only letters and spaces.
+// Examples:
+// SelectWords("Mary had a little lamb", 4) ==> ["little"]
+// SelectWords("Mary had a little lamb", 3) ==> ["Mary", "lamb"]
+// SelectWords("simple white space", 2) ==> []
+// SelectWords("Hello world", 4) ==> ["world"]
+// SelectWords("Uncle sam", 3) ==> ["Uncle"]
+func SelectWords(s string, n int) []string {
 
-    sort.Slice(arr, func(i, j int) bool {
-        return arr[i] < arr[j]
-    })
-    sort.Slice(arr, func(i, j int) bool {
-        key := func(x int) int {
-            b := fmt.Sprintf("%b", x)
-            cnt := 0
-            for _, r := range b {
-                if r == '1' {
-                    cnt++
-                }
+    result := make([]string, 0)
+    for _, word := range strings.Fields(s) {
+        n_consonants := 0
+        lower := strings.ToLower(word)
+        for i := 0;i < len(word); i++ {
+            if bytes.Contains([]byte("aeiou"), []byte{lower[i]}) {
+                n_consonants++
             }
-            return cnt
         }
-        return key(arr[j]) < key(arr[i])
-    })
-    return arr
+        if n_consonants == n{
+            result = append(result, word)
+        }
+    }
+    return result
 }
 
-func ExampleTestSortArray(t *testing.T) {
+func ExampleTestSelectWords(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal([]int{1, 2, 4, 3, 5}, SortArray([]int{1,5,2,3,4}))
-    assert.Equal([]int{-4, -2, -6, -5, -3}, SortArray([]int{-2,-3,-4,-5,-6}))
-    assert.Equal([]int{0, 1, 2, 4, 3}, SortArray([]int{1,0,2,3,4}))
+    assert.Equal([]string{"little"}, SelectWords("Mary had a little lamb", 4))
+    assert.Equal([]string{"Mary", "lamb"}, SelectWords("Mary had a little lamb", 3))
+    assert.Equal([]string{}, SelectWords("simple white space", 2))
+    assert.Equal([]string{"world"}, SelectWords("Hello world", 4))
+    assert.Equal([]string{"Uncle"}, SelectWords("Uncle sam", 3))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestSortArray(t)
+    ExampleTestSelectWords(t)
 }
