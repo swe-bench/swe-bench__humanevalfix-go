@@ -4,45 +4,42 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
+import (
+    "strconv"
+)
 
-// Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in
-// the last couple centuries. However, what people don't know is Tribonacci sequence.
-// Tribonacci sequence is defined by the recurrence:
-// Tri(1) = 3
-// Tri(n) = 1 + n / 2, if n is even.
-// Tri(n) =  Tri(n - 1) + Tri(n - 2) + Tri(n + 1), if n is odd.
+// Given a positive integer n, return the product of the odd Digits.
+// Return 0 if all Digits are even.
 // For example:
-// Tri(2) = 1 + (2 / 2) = 2
-// Tri(4) = 3
-// Tri(3) = Tri(2) + Tri(1) + Tri(4)
-// = 2 + 3 + 3 = 8
-// You are given a non-negative integer number n, you have to a return a list of the
-// first n + 1 numbers of the Tribonacci sequence.
-// Examples:
-// Tri(3) = [1, 3, 2, 8]
-func Tri(n int) []float64 {
+// Digits(1)  == 1
+// Digits(4)  == 0
+// Digits(235) == 15
+func Digits(n int) int {
 
-    if n == 0 {
-        return []float64{1}
-    }
-    my_tri := []float64{1, 3}
-    for i := 2; i < n + 1; i++ {
-        if i &1 == 0 {
-            my_tri = append(my_tri, float64(i) / 2 + 1)
-        } else {
-            my_tri = append(my_tri, my_tri[i - 1] + my_tri[i - 2] + i + (float64(i) + 3) / 2)
+    product := 1
+    odd_count := 0
+    for _, digit := range strconv.Itoa(n) {
+        int_digit := int(digit-'0')
+        if int_digit&1 == 1 {
+            product=odd_count*product*int_digit
+            odd_count++
         }
     }
-    return my_tri
+    if odd_count==0 {
+        return 0
+    }
+    return product
 }
 
-func ExampleTestTri(t *testing.T) {
+func ExampleTestDigits(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal([]float64{1, 3, 2.0, 8.0}, Tri(3))
+    assert.Equal(1, Digits(1))
+    assert.Equal(0, Digits(4))
+    assert.Equal(15, Digits(235))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestTri(t)
+    ExampleTestDigits(t)
 }
