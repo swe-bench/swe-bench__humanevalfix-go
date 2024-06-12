@@ -8,56 +8,47 @@ import (
     "sort"
 )
 
-// You are given a 2 dimensional data, as a nested lists,
-// which is similar to matrix, however, unlike matrices,
-// each row may contain a different number of columns.
-// Given lst, and integer x, find integers x in the list,
-// and return list of tuples, [(x1, y1), (x2, y2) ...] such that
-// each tuple is a coordinate - (row, columns), starting with 0.
-// Sort coordinates initially by rows in ascending order.
-// Also, sort coordinates of the row by columns in descending order.
+// Given an array of non-negative integers, return a copy of the given array after sorting,
+// you will sort the given array in ascending order if the sum( first index value, last index value) is odd,
+// or sort it in descending order if the sum( first index value, last index value) is even.
+// 
+// Note:
+// * don't change the given array.
 // 
 // Examples:
-// GetRow([
-// [1,2,3,4,5,6],
-// [1,2,3,4,1,6],
-// [1,2,3,4,5,1]
-// ], 1) == [(0, 0), (1, 4), (1, 0), (2, 5), (2, 0)]
-// GetRow([], 1) == []
-// GetRow([[], [1], [1, 2, 3]], 3) == [(2, 2)]
-func GetRow(lst [][]int, x int) [][2]int {
+// * SortArray([]) => []
+// * SortArray([5]) => [5]
+// * SortArray([2, 4, 3, 0, 1, 5]) => [0, 1, 2, 3, 4, 5]
+// * SortArray([2, 4, 3, 0, 1, 5, 6]) => [6, 5, 4, 3, 2, 1, 0]
+func SortArray(array []int) []int {
 
-    coords := make([][2]int, 0)
-    for i, row := range lst {
-        for j, item := range row {
-            if item == x {
-                coords = append(coords, [2]int{i, j})
-            }
-        }
+    arr := make([]int, len(array))
+    copy(arr, array)
+    if len(arr) == 0 {
+        return arr
     }
-    sort.Slice(coords, func(i, j int) bool {
-        if coords[i][0] == coords[j][0] {
-            return coords[j][1] > coords[i][1]
-        }
-        return coords[j][0] < coords[i][0]
-    })
-
-    return coords
+    if (arr[0]+arr[len(arr)-1])%2 != 0 {
+        sort.Slice(arr, func(i, j int) bool {
+            return arr[i] > arr[j]
+        })
+    } else {
+        sort.Slice(arr, func(i, j int) bool {
+            return arr[i] < arr[j]
+        })
+    }
+    return arr
 }
 
-func ExampleTestGetRow(t *testing.T) {
+func ExampleTestSortArray(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal([][2]int{{0, 0}, {1, 4}, {1, 0}, {2, 5}, {2, 0}}, GetRow([][]int{
-        {1, 2, 3, 4, 5, 6},
-        {1, 2, 3, 4, 1, 6},
-        {1, 2, 3, 4, 5, 1},
-    }, 1))
-    assert.Equal([][2]int{}, GetRow([][]int{{}}, 1))
-    assert.Equal([][2]int{{2, 2}}, GetRow([][]int{{}, {1}, {1, 2, 3}}, 3))
+    assert.Equal([]int{}, SortArray([]int{}), "Error")
+    assert.Equal([]int{5}, SortArray([]int{5}), "Error")
+    assert.Equal([]int{0, 1, 2, 3, 4, 5}, SortArray([]int{2, 4, 3, 0, 1, 5}), "Error")
+    assert.Equal([]int{6, 5, 4, 3, 2, 1, 0}, SortArray([]int{2, 4, 3, 0, 1, 5, 6}), "Error")
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestGetRow(t)
+    ExampleTestSortArray(t)
 }
