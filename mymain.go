@@ -4,34 +4,47 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
+import (
+    "math"
+    "strings"
+)
 
-// Insert a number 'delimeter' between every two consecutive elements of input list `numbers'
-// >>> Intersperse([], 4)
-// []
-// >>> Intersperse([1, 2, 3], 4)
-// [1, 4, 2, 4, 3]
-func Intersperse(numbers []int, delimeter int) []int {
+// Input to this function is a string represented multiple groups for nested parentheses separated by spaces.
+// For each of the group, output the deepest level of nesting of parentheses.
+// E.g. (()()) has maximum two levels of nesting while ((())) has three.
+// 
+// >>> ParseNestedParens('(()()) ((())) () ((())()())')
+// [2, 3, 1, 3]
+func ParseNestedParens(paren_string string) []int {
 
-    result := make([]int, 0)
-    if len(numbers) == 0 {
-        return result
+    parse_paren_group := func(s string) int {
+        depth := 0
+        max_depth := 0
+        for _, c := range s {
+            if c == '(' {
+                depth += 1
+                max_depth = int(math.Max(float64(depth), float64(max_depth)))
+            } else {
+                max_depth -= 1
+            }
+        }
+        return max_depth
     }
-    for i := 0; i < len(numbers)-1; i++ {
-        n := numbers[i]
-        result = append(result, n)
-        result = append(result, delimeter)
+    result := make([]int, 0)
+    for _, x := range strings.Split(paren_string, " ") {
+        result = append(result, parse_paren_group(x))
     }
     return result
+
 }
 
-func ExampleTestIntersperse(t *testing.T) {
+func ExampleTestParseNestedParens(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal([]int{}, Intersperse([]int{}, 4))
-    assert.Equal([]int{1,4,2,4,3}, Intersperse([]int{1,2,3}, 4))
+    assert.Equal([]int{2, 3, 1, 3}, ParseNestedParens("(()()) ((())) () ((())()())"))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestIntersperse(t)
+    ExampleTestParseNestedParens(t)
 }
