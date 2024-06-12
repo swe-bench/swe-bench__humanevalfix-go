@@ -6,49 +6,48 @@ import (
 )
 import (
     "bytes"
-    "strings"
 )
 
-// Given a string s and a natural number n, you have been tasked to implement
-// a function that returns a list of all words from string s that contain exactly
-// n consonants, in order these words appear in the string s.
-// If the string s is empty then the function should return an empty list.
-// Note: you may assume the input string contains only letters and spaces.
-// Examples:
-// SelectWords("Mary had a little lamb", 4) ==> ["little"]
-// SelectWords("Mary had a little lamb", 3) ==> ["Mary", "lamb"]
-// SelectWords("simple white space", 2) ==> []
-// SelectWords("Hello world", 4) ==> ["world"]
-// SelectWords("Uncle sam", 3) ==> ["Uncle"]
-func SelectWords(s string, n int) []string {
+// You are given a word. Your task is to find the closest vowel that stands between
+// two consonants from the right side of the word (case sensitive).
+// 
+// Vowels in the beginning and ending doesn't count. Return empty string if you didn't
+// find any vowel met the above condition.
+// 
+// You may assume that the given string contains English letter only.
+// 
+// Example:
+// GetClosestVowel("yogurt") ==> "u"
+// GetClosestVowel("FULL") ==> "U"
+// GetClosestVowel("quick") ==> ""
+// GetClosestVowel("ab") ==> ""
+func GetClosestVowel(word string) string {
 
-    result := make([]string, 0)
-    for _, word := range strings.Fields(s) {
-        n_consonants := 0
-        lower := strings.ToLower(word)
-        for i := 0;i < len(word); i++ {
-            if bytes.Contains([]byte("aeiou"), []byte{lower[i]}) {
-                n_consonants++
+    if len(word) < 3 {
+        return " "
+    }
+
+    vowels := []byte("aeiouAEOUI")
+    for i := len(word)-2; i > 0; i-- {
+        if bytes.Contains(vowels, []byte{word[i]}) {
+            if !bytes.Contains(vowels, []byte{word[i+1]}) && !bytes.Contains(vowels, []byte{word[i-1]}) {
+                return string(word[i])
             }
         }
-        if n_consonants == n{
-            result = append(result, word)
-        }
     }
-    return result
+    return " "
 }
 
-func ExampleTestSelectWords(t *testing.T) {
+func ExampleTestGetClosestVowel(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal([]string{"little"}, SelectWords("Mary had a little lamb", 4))
-    assert.Equal([]string{"Mary", "lamb"}, SelectWords("Mary had a little lamb", 3))
-    assert.Equal([]string{}, SelectWords("simple white space", 2))
-    assert.Equal([]string{"world"}, SelectWords("Hello world", 4))
-    assert.Equal([]string{"Uncle"}, SelectWords("Uncle sam", 3))
+    assert.Equal("u", GetClosestVowel("yogurt"))
+    assert.Equal("U", GetClosestVowel("FULL"))
+    assert.Equal("", GetClosestVowel("ab"))
+    assert.Equal("", GetClosestVowel("quick"))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestSelectWords(t)
+    ExampleTestGetClosestVowel(t)
 }
