@@ -2,33 +2,50 @@ package main
 
 import (
     "testing"
-    "crypto/md5"
     "github.com/stretchr/testify/assert"
 )
-import (
-    "crypto/md5"
-    "fmt"
-)
 
-// Given a string 'text', return its md5 hash equivalent string.
-// If 'text' is an empty string, return nil.
+// Given two positive integers a and b, return the even digits between a
+// and b, in ascending order.
 // 
-// >>> StringToMd5('Hello world') == '3e25960a79dbc69b674cd4ec67a72c62'
-func StringToMd5(text string) interface{} {
+// For example:
+// GenerateIntegers(2, 8) => [2, 4, 6, 8]
+// GenerateIntegers(8, 2) => [2, 4, 6, 8]
+// GenerateIntegers(10, 14) => []
+func GenerateIntegers(a, b int) []int {
 
-    if len(text) == 0 {
-        return fmt.Sprintf("%x", md5.Sum([]byte("")))
+    min := func (a, b int) int {
+        if a > b {
+            return b
+        }
+        return a
     }
-    return fmt.Sprintf("%x", md5.Sum([]byte(text)))
+    max := func (a, b int) int {
+        if a > b {
+            return a
+        }
+        return b
+    }
+    lower := max(2, min(a, b))
+    upper := min(8, max(a, b))
+    ans := make([]int, 0)
+    for i := lower;i < upper;i++ {
+        if i&1==0 {
+            ans = append(ans, i)
+        }
+    }
+    return ans
 }
 
-func ExampleTestStringToMd5(t *testing.T) {
+func ExampleTestGenerateIntegers(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal("3e25960a79dbc69b674cd4ec67a72c62", StringToMd5("Hello world"))
+    assert.Equal([]int{2, 4, 6, 8}, GenerateIntegers(2, 8))
+    assert.Equal([]int{2, 4, 6, 8}, GenerateIntegers(8, 2))
+    assert.Equal([]int{}, GenerateIntegers(10, 14))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestStringToMd5(t)
+    ExampleTestGenerateIntegers(t)
 }
