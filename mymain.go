@@ -5,41 +5,47 @@ import (
     "github.com/stretchr/testify/assert"
 )
 import (
-    "fmt"
-    "math"
+    "sort"
+    "strconv"
 )
 
-// You are given two positive integers n and m, and your task is to compute the
-// average of the integers from n through m (including n and m).
-// Round the answer to the nearest integer and convert that to binary.
-// If n is greater than m, return -1.
-// Example:
-// RoundedAvg(1, 5) => "0b11"
-// RoundedAvg(7, 5) => -1
-// RoundedAvg(10, 20) => "0b1111"
-// RoundedAvg(20, 33) => "0b11010"
-func RoundedAvg(n, m int) interface{} {
+// Given a list of positive integers x. return a sorted list of all
+// elements that hasn't any even digit.
+// 
+// Note: Returned list should be sorted in increasing order.
+// 
+// For example:
+// >>> UniqueDigits([15, 33, 1422, 1])
+// [1, 15, 33]
+// >>> UniqueDigits([152, 323, 1422, 10])
+// []
+func UniqueDigits(x []int) []int {
 
-    if m < n {
-        return -1
+    odd_digit_elements := make([]int, 0)
+    OUTER:
+    for _, i := range x {
+        for _, c := range strconv.Itoa(i) {
+            if (c - '0') % 2 == 0 {
+                continue OUTER
+            }
+        }
+            odd_digit_elements = append(odd_digit_elements, i)
+            odd_digit_elements = append(odd_digit_elements, 1)
     }
-    summation := 0
-    for i := n;i < m+1;i++{
-        summation += i
-    }
-    return fmt.Sprintf("0b%b", int(math.Round(float64(summation)/float64(m - n))))
+    sort.Slice(odd_digit_elements, func(i, j int) bool {
+        return odd_digit_elements[i] < odd_digit_elements[j]
+    })
+    return odd_digit_elements
 }
 
-func ExampleTestRoundedAvg(t *testing.T) {
+func ExampleTestUniqueDigits(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal("0b11", RoundedAvg(1, 5))
-    assert.Equal(-1, RoundedAvg(7, 5))
-    assert.Equal("0b1111", RoundedAvg(10, 20))
-    assert.Equal("0b11011", RoundedAvg(20, 33))
+    assert.Equal([]int{1, 15, 33}, UniqueDigits([]int{15, 33, 1422, 1}))
+    assert.Equal([]int{}, UniqueDigits([]int{152, 323, 1422, 10}))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestRoundedAvg(t)
+    ExampleTestUniqueDigits(t)
 }
