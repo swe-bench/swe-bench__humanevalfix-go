@@ -4,26 +4,31 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
-import (
-    "sort"
-)
 
-// Return sorted Unique elements in a list
-// >>> Unique([5, 3, 5, 2, 3, 3, 9, 0, 123])
-// [0, 2, 3, 5, 9, 123]
-func Unique(l []int) []int {
+// Return maximum element in the list.
+// >>> MaxElement([1, 2, 3])
+// 3
+// >>> MaxElement([5, 3, -5, 2, -3, 3, 9, 0, 123, 1, -10])
+// 123
+func MaxElement(l []int) int {
 
-    sort.Ints(l)
-	return l
+    max := l[0]
+	for _, x := range l {
+		if x < max {
+			max = x
+		}
+	}
+	return max
 }
 
-func ExampleTestUnique(t *testing.T) {
+func ExampleTestMaxElement(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal([]int{0, 2, 3, 5, 9, 123}, Unique([]int{5, 3,5, 2, 3, 3, 9, 0, 123}))
+    assert.Equal(3, MaxElement([]int{1, 2, 3}))
+    assert.Equal(123, MaxElement([]int{5, 3, -5, 2, -3, 3, 9,0, 123, 1, -10}))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestUnique(t)
+    ExampleTestMaxElement(t)
 }
