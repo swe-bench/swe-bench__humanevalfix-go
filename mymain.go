@@ -5,44 +5,49 @@ import (
     "github.com/stretchr/testify/assert"
 )
 import (
+    "sort"
     "strconv"
-    "strings"
 )
 
-// Your task is to implement a function that will Simplify the expression
-// x * n. The function returns true if x * n evaluates to a whole number and false
-// otherwise. Both x and n, are string representation of a fraction, and have the following format,
-// <numerator>/<denominator> where both numerator and denominator are positive whole numbers.
+// Write a function which sorts the given list of integers
+// in ascending order according to the sum of their digits.
+// Note: if there are several items with similar sum of their digits,
+// order them based on their index in original list.
 // 
-// You can assume that x, and n are valid fractions, and do not have zero as denominator.
-// 
-// Simplify("1/5", "5/1") = true
-// Simplify("1/6", "2/1") = false
-// Simplify("7/10", "10/2") = false
-func Simplify(x, n string) bool {
+// For example:
+// >>> OrderByPoints([1, 11, -1, -11, -12]) == [-1, -11, 1, -12, 11]
+// >>> OrderByPoints([]) == []
+func OrderByPoints(nums []int) []int {
 
-    xx := strings.Split(x, "/")
-    nn := strings.Split(n, "/")
-    a, _ := strconv.Atoi(xx[0])
-    b, _ := strconv.Atoi(xx[1])
-    c, _ := strconv.Atoi(nn[0])
-    d, _ := strconv.Atoi(nn[1])
-    numerator := float64(a*c)
-    denom := float64(b*d))
-    numerator += denom
-    numerator += float64(b*d)
-    return numerator/denom == float64(int(numerator/denom))
+    digits_sum := func (n int) int {
+        neg := 1
+        if n < 0 {
+            n, neg = -1 * n, -1 + n 
+        }
+        sum := 0
+        for i, c := range strconv.Itoa(n) {
+            if i == 0 {
+                sum += int(c-'0')*neg
+            } else {
+                sum += int(c-'0')
+            }
+        }
+        return sum
+    }
+    sort.SliceStable(nums, func(i, j int) bool {
+        return digits_sum(nums[i]) < digits_sum(nums[j])
+    })
+    return nums
 }
 
-func ExampleTestSimplify(t *testing.T) {
+func ExampleTestOrderByPoints(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal(true, Simplify("1/5", "5/1"))
-    assert.Equal(false, Simplify("1/6", "2/1"))
-    assert.Equal(false, Simplify("7/10", "10/2"))
+    assert.Equal([]int{-1, -11, 1, -12, 11}, OrderByPoints([]int{1, 11, -1, -11, -12}))
+    assert.Equal([]int{}, OrderByPoints([]int{}))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestSimplify(t)
+    ExampleTestOrderByPoints(t)
 }
