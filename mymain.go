@@ -5,48 +5,47 @@ import (
     "github.com/stretchr/testify/assert"
 )
 import (
-	"strconv"
-	"strings"
+	"sort"
 )
 
-// Return the number of times the digit 7 appears in integers less than n which are divisible by 11 or 13.
-// >>> FizzBuzz(50)
-// 0
-// >>> FizzBuzz(78)
-// 2
-// >>> FizzBuzz(79)
-// 3
-func FizzBuzz(n int) int {
+// This function takes a list l and returns a list l' such that
+// l' is identical to l in the odd indicies, while its values at the even indicies are equal
+// to the values of the even indicies of l, but sorted.
+// >>> SortEven([1, 2, 3])
+// [1, 2, 3]
+// >>> SortEven([5, 6, 3, 4])
+// [3, 6, 5, 4]
+func SortEven(l []int) []int {
 
-    ns := make([]int, 0)
-	for i := 0; i < n; i++ {
-		if i%11 == 0 && i%13 == 0 {
-			ns = append(ns, i)
-		}
+    evens := make([]int, 0)
+	for i := 0; i < len(l); i += 2 {
+		evens = append(evens, l[i])
 	}
-	temp := make([]string, 0)
-	for _, i := range ns {
-		temp = append(temp, strconv.Itoa(i))
+	sort.Ints(l)
+	j := 0
+	for i := 0; i < len(l); i += 2 {
+		l[i] = evens[j]
+		j++
 	}
-	join := strings.Join(temp, "")
-	ans := 0
-	for _, c := range join {
-		if c == '7' {
-			ans++
-		}
-	}
-	return ans
+	return l
 }
 
-func ExampleTestFizzBuzz(t *testing.T) {
-    assert := assert.New(t)
-    assert.Equal(0, FizzBuzz(50))
-    assert.Equal(2, FizzBuzz(78))
-    assert.Equal(3, FizzBuzz(79))
+func ExampleTestSortEven(t *testing.T) {
+	assert := assert.New(t)
+	same := func(src []int, target []int) bool {
+		for i := 0; i < len(src); i++ {
+			if src[i] != target[i] {
+				return false
+			}
+		}
+		return true
+	}
+	assert.Equal(true, same([]int{1, 2, 3}, SortEven([]int{1, 2, 3})))
+	assert.Equal(true, same([]int{3,6,5,4}, SortEven([]int{5,6,3,4})))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestFizzBuzz(t)
+    ExampleTestSortEven(t)
 }
