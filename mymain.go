@@ -1,64 +1,50 @@
 package main
 
 import (
-    "math"
+    "testing"
+    "github.com/stretchr/testify/assert"
 )
 
-// Given two lists operator, and operand. The first list has basic algebra operations, and
-// the second list is a list of integers. Use the two given lists to build the algebric
-// expression and return the evaluation of this expression.
-// 
-// The basic algebra operations:
-// Addition ( + )
-// Subtraction ( - )
-// Multiplication ( * )
-// Floor division ( // )
-// Exponentiation ( ** )
-// 
-// Example:
-// operator['+', '*', '-']
-// array = [2, 3, 4, 5]
-// result = 2 + 3 * 4 - 5
-// => result = 9
-// 
-// Note:
-// The length of operator list is equal to the length of operand list minus one.
-// Operand is a list of of non-negative integers.
-// Operator list has at least one operator, and operand list has at least two operands.
-func DoAlgebra(operator []string, operand []int) int {
+// You are given a string s.
+// if s[i] is a letter, reverse its case from lower to upper or vise versa,
+// otherwise keep it as it is.
+// If the string contains no letters, reverse the string.
+// The function should return the resulted string.
+// Examples
+// Solve("1234") = "4321"
+// Solve("ab") = "AB"
+// Solve("#a@C") = "#A@c"
+func Solve(s string) string {
 
-    higher := func(a, b string) bool {
-        if b == "*" || b == "//" || b == "**" {
-            return false
-        }
-        if a == "*" || a == "//" || a == "**" {
-            return true
-        }
-        return false
-    }
-    for len(operand) > 1 {
-        pos := 0
-        sign := operator[0]
-        for i, str := range operator {
-            if higher(str, sign) {
-                sign = str
-                pos = i
+    flg := 0
+    new_str := []rune(s)
+    for i, r := range new_str {
+        if ('a' <= r && r <= 'z') {
+            if 'a' <= r && r <= 'z' {
+                new_str[i] = r - 'a' + 'A'
+            } else {
+                new_str[i] = r - 'A' + 'a'
             }
+            flg = 1
         }
-        switch sign {
-        case "+":
-            operand[pos] += operand[pos+1]
-        case "-":
-            operand[pos] -= operand[pos+1]
-        case "*":
-            operand[pos] *= operand[pos+1]
-        case "//":
-            operand[pos] /= operand[pos+1]
-        case "**":
-            operand[pos] = int(math.Pow(float64(operand[pos+1]), float64(operand[pos+1])))
-        }
-        operator = append(operator[:pos], operator[pos+1:]...)
-        operand = append(operand[:pos+1], operand[pos+2:]...)
     }
-    return operand [0]
+    if flg == 0 {
+        for i := 0;i < len(new_str)>>1;i++ {
+            new_str[i], new_str[len(new_str)-i-1] = new_str[len(new_str)-i-1], new_str[i]
+        }
+    }
+    return string(new_str)
+}
+
+func ExampleTestSolve(t *testing.T) {
+    assert := assert.New(t)
+    assert.Equal("4321", Solve("1234"))
+    assert.Equal("AB", Solve("ab"))
+    assert.Equal("#A@c", Solve("#a@C"))
+}
+
+func main() {
+    // Here you can call the test functions or any other code
+    t := &testing.T{}
+    ExampleTestSolve(t)
 }
