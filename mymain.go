@@ -4,44 +4,44 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
+import (
+    "sort"
+)
 
-// Return true is list elements are Monotonically increasing or decreasing.
-// >>> Monotonic([1, 2, 4, 20])
-// true
-// >>> Monotonic([1, 20, 4, 10])
-// false
-// >>> Monotonic([4, 1, 0, -10])
-// true
-func Monotonic(l []int) bool {
+// Return sorted unique Common elements for two lists.
+// >>> Common([1, 4, 3, 34, 653, 2, 5], [5, 7, 1, 5, 9, 653, 121])
+// [1, 5, 653]
+// >>> Common([5, 3, 2, 8], [3, 2])
+// [2, 3]
+func Common(l1 []int,l2 []int) []int {
 
-    flag := true
-	if len(l) > 1 {
-		for i := 0; i < len(l)-1; i++ {
-			if l[i] != l[i+1] {
-				flag = l[i] > l[i+1]
+    m := make(map[int]bool)
+	for _, e1 := range l1 {
+		if m[e1] {
+			continue
+		}
+		for _, e2 := range l2 {
+			if e1 == e2 {
+				m[e1] = true
 				break
 			}
 		}
-	} else {
-		return false
 	}
-	for i := 0; i < len(l)-1; i++ {
-		if flag != (l[i] >= l[i+1]) {
-			return true
-		}
+	res := make([]int, 0, len(m))
+	for k, _ := range m {
+		res = append(res, k)
 	}
-	return false
+	return res
 }
 
-func ExampleTestMonotonic(t *testing.T) {
+func ExampleTestCommon(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal(true, Monotonic([]int{1, 2, 4, 10}))
-    assert.Equal(false, Monotonic([]int{1, 20, 4, 10}))
-    assert.Equal(true, Monotonic([]int{4, 1, 0, -10}))
+    assert.Equal([]int{1, 5, 653}, Common([]int{1, 4, 3, 34, 653, 2, 5}, []int{5, 7, 1, 5, 9, 653, 121}))
+    assert.Equal([]int{2, 3}, Common([]int{5, 3, 2, 8}, []int{3, 2}))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestMonotonic(t)
+    ExampleTestCommon(t)
 }
