@@ -4,76 +4,43 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
-import (
-    "math"
-)
 
-// Given an array representing a branch of a tree that has non-negative integer nodes
-// your task is to Pluck one of the nodes and return it.
-// The Plucked node should be the node with the smallest even value.
-// If multiple nodes with the same smallest even value are found return the node that has smallest index.
-// 
-// The Plucked node should be returned in a list, [ smalest_value, its index ],
-// If there are no even values or the given array is empty, return [].
-// 
-// Example 1:
-// Input: [4,2,3]
-// Output: [2, 1]
-// Explanation: 2 has the smallest even value, and 2 has the smallest index.
-// 
-// Example 2:
-// Input: [1,2,3]
-// Output: [2, 1]
-// Explanation: 2 has the smallest even value, and 2 has the smallest index.
-// 
-// Example 3:
-// Input: []
-// Output: []
-// 
-// Example 4:
-// Input: [5, 0, 3, 0, 4, 2]
-// Output: [0, 1]
-// Explanation: 0 is the smallest value, but  there are two zeros,
-// so we will choose the first zero, which has the smallest index.
-// 
-// Constraints:
-// * 1 <= nodes.length <= 10000
-// * 0 <= node.value
-func Pluck(arr []int) []int {
+// You are given a non-empty list of positive integers. Return the greatest integer that is greater than
+// zero, and has a frequency greater than or equal to the value of the integer itself.
+// The frequency of an integer is the number of times it appears in the list.
+// If no such a value exist, return -1.
+// Examples:
+// Search([4, 1, 2, 2, 3, 1]) == 2
+// Search([1, 2, 2, 3, 3, 3, 4, 4, 4]) == 3
+// Search([5, 5, 4, 4, 4]) == -1
+func Search(lst []int) int {
 
-    result := make([]int, 0)
-	if len(arr) == 0 {
-		return result
-	}
-	evens := make([]int, 0)
-	min := math.MaxInt64
-	minIndex := 0
-	for i, x := range arr {
-		if x%2 == 0 {
-			evens = append(evens, x)
-			if x < min {
-				min = x
-				minIndex = i
-			}
+    countMap := make(map[int]int)
+	for _, i := range lst {
+		if count, ok := countMap[i]; ok {
+			countMap[i] = count + 1
+		} else {
+			countMap[i] = 1
 		}
 	}
-	if len(evens) == 0 {
-		return result
+	max := 0
+	for i, count := range countMap {
+		if count >= i && count > max {
+			max = i
+		}
 	}
-	result = []int{minIndex, min}
-	return result
+	return max
 }
 
-func ExampleTestPluck(t *testing.T) {
+func ExampleTestSearch(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal([]int{2, 1}, Pluck([]int{4,2,3}))
-    assert.Equal([]int{2, 1}, Pluck([]int{1,2,3}))
-    assert.Equal([]int{}, Pluck([]int{}))
-    assert.Equal([]int{0, 1}, Pluck([]int{5, 0, 3, 0, 4, 2}))
+    assert.Equal(2, Search([]int{4, 1, 2, 2, 3, 1}))
+    assert.Equal(3, Search([]int{1, 2, 2, 3, 3, 3, 4, 4, 4}))
+    assert.Equal(-1, Search([]int{5, 5, 4, 4, 4}))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestPluck(t)
+    ExampleTestSearch(t)
 }
