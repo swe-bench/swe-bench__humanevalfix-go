@@ -4,65 +4,49 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
+import (
+    "math"
+)
 
-// You are given two intervals,
-// where each interval is a pair of integers. For example, interval = (start, end) = (1, 2).
-// The given intervals are closed which means that the interval (start, end)
-// includes both start and end.
-// For each given interval, it is assumed that its start is less or equal its end.
-// Your task is to determine whether the length of Intersection of these two
-// intervals is a prime number.
-// Example, the Intersection of the intervals (1, 3), (2, 4) is (2, 3)
-// which its length is 1, which not a prime number.
-// If the length of the Intersection is a prime number, return "YES",
-// otherwise, return "NO".
-// If the two intervals don't intersect, return "NO".
+// You are given an array arr of integers and you need to return
+// sum of magnitudes of integers multiplied by product of all signs
+// of each number in the array, represented by 1, -1 or 0.
+// Note: return nil for empty arr.
 // 
-// 
-// [input/output] samples:
-// Intersection((1, 2), (2, 3)) ==> "NO"
-// Intersection((-1, 1), (0, 4)) ==> "NO"
-// Intersection((-3, -1), (-5, 5)) ==> "YES"
-func Intersection(interval1 [2]int, interval2 [2]int) string {
+// Example:
+// >>> ProdSigns([1, 2, 2, -4]) == -9
+// >>> ProdSigns([0, 1]) == 0
+// >>> ProdSigns([]) == nil
+func ProdSigns(arr []int) interface{} {
 
-    is_prime := func(num int) bool {
-        if num == 1 || num == 0 {
-            return false
+    if len(arr) == 0 {
+        return nil
+    }
+    cnt := 0
+    sum := 0
+    for _, i := range arr {
+        if i == 0 {
+            return 0
         }
-        if num == 2 {
-            return true
+        if i < 0 {
+            cnt++
         }
-        for i := 2;i < num;i++ {
-            if num%i == 0 {
-                return false
-            }
-        }
-        return true
+        sum += int(math.Abs(float64(i)))
     }
-    l := interval1[0]
-    if interval2[0] > l {
-        l = interval2[0]
-    }
-    r := interval1[1]
-    if interval2[1] < r {
-        r = interval2[1]
-    }
-    length := r - l
-    if length > 0 {
-        return "YES"
-    }
-    return "NO"
+
+    prod := int(math.Pow(-1, float64(cnt*2)))
+    return prod * sum
 }
 
-func ExampleTestIntersection(t *testing.T) {
+func ExampleTestProdSigns(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal("NO", Intersection([2]int{1, 2}, [2]int{2, 3}))
-    assert.Equal("NO", Intersection([2]int{-1, 1}, [2]int{0, 4}))
-    assert.Equal("YES", Intersection([2]int{-3, -1}, [2]int{-5, 5}))
+    assert.Equal(-9, ProdSigns([]int{1, 2, 2, -4}))
+    assert.Equal(0, ProdSigns([]int{0, 1}))
+    assert.Equal(nil, ProdSigns([]int{}))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestIntersection(t)
+    ExampleTestProdSigns(t)
 }
