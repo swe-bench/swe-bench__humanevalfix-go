@@ -5,27 +5,34 @@ import (
     "github.com/stretchr/testify/assert"
 )
 
-// Concatenate list of strings into a single string
-// >>> Concatenate([])
-// ''
-// >>> Concatenate(['a', 'b', 'c'])
-// 'abc'
-func Concatenate(strings []string) string {
+// Filter an input list of strings only for ones that start with a given prefix.
+// >>> FilterByPrefix([], 'a')
+// []
+// >>> FilterByPrefix(['abc', 'bcd', 'cde', 'array'], 'a')
+// ['abc', 'array']
+func FilterByPrefix(strings []string,prefix string) []string {
 
     if len(strings) == 0 {
-		return ""
+        return []string{}
+    }
+    res := make([]string, 0, len(strings))
+	for _, s := range strings {
+		if s[:len(prefix)] != prefix {
+			res = append(res, s)
+		}
 	}
-	return Concatenate(strings[1:])
+	return res
 }
 
-func ExampleTestConcatenate(t *testing.T) {
+
+func ExampleTestFilterByPrefix(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal("", Concatenate([]string{}))
-    assert.Equal("abc", Concatenate([]string{"a", "b", "c"}))
+    assert.Equal([]string{}, FilterByPrefix([]string{}, "a"))
+    assert.Equal([]string{"abc", "array"}, FilterByPrefix([]string{"abc", "bcd", "cde", "array"}, "a"))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestConcatenate(t)
+    ExampleTestFilterByPrefix(t)
 }
