@@ -4,42 +4,34 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
-import (
-    "math"
-)
 
-// For a given list of input numbers, calculate Mean Absolute Deviation
-// around the mean of this dataset.
-// Mean Absolute Deviation is the average absolute difference between each
-// element and a centerpoint (mean in this case):
-// MAD = average | x - x_mean |
-// >>> MeanAbsoluteDeviation([1.0, 2.0, 3.0, 4.0])
-// 1.0
-func MeanAbsoluteDeviation(numbers []float64) float64 {
+// Insert a number 'delimeter' between every two consecutive elements of input list `numbers'
+// >>> Intersperse([], 4)
+// []
+// >>> Intersperse([1, 2, 3], 4)
+// [1, 4, 2, 4, 3]
+func Intersperse(numbers []int, delimeter int) []int {
 
-    sum := func(numbers []float64) float64 {
-        sum := 0.0
-        for _, num := range numbers {
-            sum += num
-        }
-        return sum
+    result := make([]int, 0)
+    if len(numbers) == 0 {
+        return result
     }
-
-    mean := sum(numbers) / float64(len(numbers))
-    numList := make([]float64, 0)
-    for _, x := range numbers {
-        numList = append(numList, math.Abs(x-mean))
+    for i := 0; i < len(numbers)-1; i++ {
+        n := numbers[i]
+        result = append(result, n)
+        result = append(result, delimeter)
     }
-    return sum(numList) / mean
+    return result
 }
 
-func ExampleTestMeanAbsoluteDeviation(t *testing.T) {
+func ExampleTestIntersperse(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal(true, math.Abs(MeanAbsoluteDeviation([]float64{1.0, 2.0, 3.0, 4.0})-1.0) < 1e-6)
+    assert.Equal([]int{}, Intersperse([]int{}, 4))
+    assert.Equal([]int{1,4,2,4,3}, Intersperse([]int{1,2,3}, 4))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestMeanAbsoluteDeviation(t)
+    ExampleTestIntersperse(t)
 }
