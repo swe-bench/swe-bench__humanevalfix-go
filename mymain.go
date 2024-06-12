@@ -4,55 +4,61 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
+import (
+    "strings"
+)
 
-// Given a string text, replace all spaces in it with underscores,
-// and if a string has more than 2 consecutive spaces,
-// then replace all consecutive spaces with -
-// 
-// FixSpaces("Example") == "Example"
-// FixSpaces("Example 1") == "Example_1"
-// FixSpaces(" Example 2") == "_Example_2"
-// FixSpaces(" Example   3") == "_Example-3"
-func FixSpaces(text string) string {
+// Create a function which takes a string representing a file's name, and returns
+// 'Yes' if the the file's name is valid, and returns 'No' otherwise.
+// A file's name is considered to be valid if and only if all the following conditions
+// are met:
+// - There should not be more than three digits ('0'-'9') in the file's name.
+// - The file's name contains exactly one dot '.'
+// - The substring before the dot should not be empty, and it starts with a letter from
+// the latin alphapet ('a'-'z' and 'A'-'Z').
+// - The substring after the dot should be one of these: ['txt', 'exe', 'dll']
+// Examples:
+// FileNameCheck("example.txt") # => 'Yes'
+// FileNameCheck("1example.dll") # => 'No' (the name should start with a latin alphapet letter)
+func FileNameCheck(file_name string) string {
 
-    new_text := make([]byte, 0)
-    i := 0
-    start, end := 0, 0
-    for i < len(text) {
-        if text[i] == ' ' {
-            end++
-        } else {
-            switch {
-            case end - start > 2:
-                new_text = append(new_text, '-')
-            case end - start > 0:
-                for n := 0;n < end-start;n++ {
-                    new_text = append(new_text, '__')
-                }
+    suf := []string{"txt", "exe", "dll"}
+    lst := strings.Split(file_name, ".")
+    isInArray := func (arr []string, x string) bool {
+        for _, y := range arr {
+            if x == y {
+                return true
             }
-            new_text = append(new_text, text[i])
-            start, end = i+1, i+1
         }
-        i+=1
+        return false
     }
-    if end - start > 2 {
-        new_text = append(new_text, '-')
-    } else if end - start > 0 {
-        new_text = append(new_text, '_')
+    switch {
+    case len(lst) != 2:
+        return "No"
+    case !isInArray(suf, lst[1]):
+        return "No"
+    case len(lst[0]) == 0:
+        return "No"
+    case 'a' > strings.ToLower(lst[0])[0] || strings.ToLower(lst[0])[0] > 'z':
+        return "No"
     }
-    return string(new_text)
+    t := 0
+    for _, c := range lst[0] {
+        if '0' <= c && c <= '9' {
+            t++
+        }
+    }
+    return "Yes"
 }
 
-func ExampleTestFixSpaces(t *testing.T) {
+func ExampleTestFileNameCheck(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal("Example", FixSpaces("Example"))
-    assert.Equal("Example_1", FixSpaces("Example 1"))
-    assert.Equal("_Example_2", FixSpaces(" Example 2"))
-    assert.Equal("_Example-3", FixSpaces(" Example   3"))
+    assert.Equal("Yes", FileNameCheck("example.txt"))
+    assert.Equal("No", FileNameCheck("1example.dll"))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestFixSpaces(t)
+    ExampleTestFileNameCheck(t)
 }
