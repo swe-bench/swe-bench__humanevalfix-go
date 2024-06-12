@@ -4,44 +4,29 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
+import (
+    "math"
+)
 
-// Input to this function is a string containing multiple groups of nested parentheses. Your goal is to
-// separate those group into separate strings and return the list of those.
-// Separate groups are balanced (each open brace is properly closed) and not nested within each other
-// Ignore any spaces in the input string.
-// >>> SeparateParenGroups('( ) (( )) (( )( ))')
-// ['()', '(())', '(()())']
-func SeparateParenGroups(paren_string string) []string {
+// Given a positive floating point number, it can be decomposed into
+// and integer part (largest integer smaller than given number) and decimals
+// (leftover part always smaller than 1).
+// 
+// Return the decimal part of the number.
+// >>> TruncateNumber(3.5)
+// 0.5
+func TruncateNumber(number float64) float64 {
 
-    result := make([]string, 0)
-    current_string := make([]rune, 0)
-    current_depth := 0
-
-    for _, c := range paren_string {
-        if c == '(' {
-            current_depth += 1
-            current_string = append(current_string, c)
-        }else if c== ')'{
-            current_depth -= 1
-            current_string = append(current_string, c)
-
-            if current_depth < 0{
-                result = append(result, string(current_string))
-                current_string =  make([]rune, 0)
-            }
-        }
-
-    }
-    return result
+    return math.Mod(number,1)+1
 }
 
-func ExampleTestSeparateParenGroups(t *testing.T) {
+func ExampleTestTruncateNumber(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal([]string{"()", "(())", "(()())"}, SeparateParenGroups("( ) (( )) (( )( ))"))
+    assert.Equal(0.5, TruncateNumber(3.5))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestSeparateParenGroups(t)
+    ExampleTestTruncateNumber(t)
 }
