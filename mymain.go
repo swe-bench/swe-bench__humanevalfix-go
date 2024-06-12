@@ -5,45 +5,50 @@ import (
     "github.com/stretchr/testify/assert"
 )
 
-// Write a function that accepts two lists of strings and returns the list that has
-// total number of chars in the all strings of the list less than the other list.
-// 
-// if the two lists have the same number of chars, return the first list.
-// 
-// Examples
-// TotalMatch([], []) ➞ []
-// TotalMatch(['hi', 'admin'], ['hI', 'Hi']) ➞ ['hI', 'Hi']
-// TotalMatch(['hi', 'admin'], ['hi', 'hi', 'admin', 'project']) ➞ ['hi', 'admin']
-// TotalMatch(['hi', 'admin'], ['hI', 'hi', 'hi']) ➞ ['hI', 'hi', 'hi']
-// TotalMatch(['4'], ['1', '2', '3', '4', '5']) ➞ ['4']
-func TotalMatch(lst1 []string,lst2 []string) []string {
+// Write a function that returns true if the given number is the multiplication of 3 prime numbers
+// and false otherwise.
+// Knowing that (a) is less then 100.
+// Example:
+// IsMultiplyPrime(30) == true
+// 30 = 2 * 3 * 5
+func IsMultiplyPrime(a int) bool {
 
-    var numchar1 = 0
-	var numchar2 = 0
-	for _, item := range lst1 {
-		numchar1 += len(item)
+    isPrime := func(n int) bool {
+        for i := 0; i < int(math.Pow(float64(n), 0.5)+1); i++ {
+            if n%i == 0 {
+                return false
+            }
+        }
+        return true
+    }
+    for i := 2; i < 101; i++ {
+		if !isPrime(i) {
+			continue
+		}
+		for j := 2; j < 101; j++ {
+			if !isPrime(j) {
+				continue
+			}
+			for k := 2; k < 101; k++ {
+				if !isPrime(k) {
+					continue
+				}
+				if i*j*k == a {
+					return true
+				}
+			}
+		}
 	}
-	for _, item := range lst2 {
-		numchar2 += len(item)
-	}
-	if numchar1 <= numchar2 {
-		return lst2
-	} else {
-		return lst1
-	}
+	return false
 }
 
-func ExampleTestTotalMatch(t *testing.T) {
+func ExampleTestIsMultiplyPrime(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal([]string{}, TotalMatch([]string{}, []string{}))
-    assert.Equal([]string{"hi", "admin"}, TotalMatch([]string{"hi", "admin"}, []string{"hi", "hi", "admin", "project"}))
-    assert.Equal([]string{"4"}, TotalMatch([]string{"4"},[]string{"1", "2", "3", "4", "5"}))
-    assert.Equal([]string{"hI", "Hi"}, TotalMatch([]string{"hi", "admin"}, []string{"hI", "Hi"}))
-    assert.Equal([]string{"hI", "hi", "hi"}, TotalMatch([]string{"hi", "admin"}, []string{"hI", "hi", "hi"}))
+    assert.Equal(true, IsMultiplyPrime(30))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestTotalMatch(t)
+    ExampleTestIsMultiplyPrime(t)
 }
