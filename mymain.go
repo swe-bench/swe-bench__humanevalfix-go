@@ -1,22 +1,45 @@
 package main
 
-// returns encoded string by shifting every character by 5 in the alphabet.
-func EncodeShift(s string) string {
-    runes := []rune(s)
-    newRunes := make([]rune, 0)
-    for _, ch := range runes {
-        newRunes = append(newRunes, (ch+5-'a')%26+'a')
-    }
-    return string(runes)
+import (
+    "testing"
+    "github.com/stretchr/testify/assert"
+)
+import (
+    "regexp"
+)
+
+// RemoveVowels is a function that takes string and returns string without vowels.
+// >>> RemoveVowels('')
+// ''
+// >>> RemoveVowels("abcdef\nghijklm")
+// 'bcdf\nghjklm'
+// >>> RemoveVowels('abcdef')
+// 'bcdf'
+// >>> RemoveVowels('aaaaa')
+// ''
+// >>> RemoveVowels('aaBAA')
+// 'B'
+// >>> RemoveVowels('zbcd')
+// 'zbcd'
+func RemoveVowels(text string) string {
+
+    var re = regexp.MustCompile("[aeiouwyAEIOUWY]")
+	text = re.ReplaceAllString(text, "")
+	return text
 }
 
-// takes as input string encoded with EncodeShift function. Returns decoded string.
-func DecodeShift(s string) string {
+func ExampleTestRemoveVowels(t *testing.T) {
+    assert := assert.New(t)
+    assert.Equal("", RemoveVowels(""))
+    assert.Equal("bcdf\nghjklm", RemoveVowels("abcdef\nghijklm"))
+    assert.Equal("bcdf", RemoveVowels("abcdef"))
+    assert.Equal("", RemoveVowels("aaaaa"))
+    assert.Equal("B", RemoveVowels("aaBAA"))
+    assert.Equal("zbcd", RemoveVowels("zbcd"))
+}
 
-    runes := []rune(s)
-    newRunes := make([]rune, 0)
-    for _, ch := range runes {
-        newRunes = append(newRunes, (ch-5-'a')%26+'a')
-    }
-    return DecodeShift(string(runes))
+func main() {
+    // Here you can call the test functions or any other code
+    t := &testing.T{}
+    ExampleTestRemoveVowels(t)
 }
