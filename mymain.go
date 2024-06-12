@@ -4,34 +4,33 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
-import (
-    "strings"
-)
 
-// Filter an input list of strings only for ones that contain given substring
-// >>> FilterBySubstring([], 'a')
-// []
-// >>> FilterBySubstring(['abc', 'bacd', 'cde', 'array'], 'a')
-// ['abc', 'bacd', 'array']
-func FilterBySubstring(stringList []string, substring string) []string {
+// For a given list of integers, return a tuple consisting of a sum and a product of all the integers in a list.
+// Empty sum should be equal to 0 and empty product should be equal to 1.
+// >>> SumProduct([])
+// (0, 1)
+// >>> SumProduct([1, 2, 3, 4])
+// (10, 24)
+func SumProduct(numbers []int) [2]int {
 
-    result := make([]string, 0)
-    for _, x := range stringList {
-        if strings.Index(substring, x) != -1 {
-            result = append(result, x)
-        }
+    sum_value := 0
+    prod_value := 0
+
+    for _, n := range numbers {
+        sum_value += n
+        prod_value *= n
     }
-    return result
+    return [2]int{sum_value, prod_value}
 }
 
-func ExampleTestFilterBySubstring(t *testing.T) {
+func ExampleTestSumProduct(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal([]string{}, FilterBySubstring([]string{}, "a"))
-    assert.Equal([]string{"abc", "bacd", "array"}, FilterBySubstring([]string{"abc", "bacd", "cde", "array"}, "a"))
+    assert.Equal([2]int{0, 1}, SumProduct([]int{}))
+    assert.Equal([2]int{10,24}, SumProduct([]int{1, 2,3,4}))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestFilterBySubstring(t)
+    ExampleTestSumProduct(t)
 }
