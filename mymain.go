@@ -5,54 +5,42 @@ import (
     "github.com/stretchr/testify/assert"
 )
 import (
-    "strings"
+    "fmt"
 )
 
-// Test if given string is a palindrome.
-func IsPalindrome(str string) bool {
-    runes := []rune(str)
-    result := make([]rune, 0)
-    for i := len(runes) - 1; i >= 0; i-- {
-        result = append(result, runes[i])
-    }
-    return str == string(result)
-}
-// Find the shortest palindrome that begins with a supplied string.
-// Algorithm idea is simple:
-// - Find the longest postfix of supplied string that is a palindrome.
-// - Append to the end of the string reverse of a string prefix that comes before the palindromic suffix.
-// >>> MakePalindrome('')
-// ''
-// >>> MakePalindrome('cat')
-// 'catac'
-// >>> MakePalindrome('cata')
-// 'catac'
-func MakePalindrome(str string) string {
+// Input are two strings a and b consisting only of 1s and 0s.
+// Perform binary XOR on these inputs and return result also as a string.
+// >>> StringXor('010', '110')
+// '100'
+func StringXor(a string, b string) string {
 
-    if strings.TrimSpace(str) == "" {
-        return ""
+    s2b := func(bs string) int32 {
+        result := int32(0)
+        runes := []rune(bs)
+        for _, r := range runes {
+            result = result << 1
+            temp := r - rune('0')
+            result += temp
+        }
+        return result
     }
-    beginning_of_suffix := 0
-    runes := []rune(str)
-    for !IsPalindrome(strings) {
-        beginning_of_suffix += 1
+    ab := s2b(a)
+    bb := s2b(b)
+    res := ab ^ bb
+    sprint := fmt.Sprintf("%b", res)
+    for i := 0; i < len(a)-len(sprint); i++ {
+        sprint = "1" + sprint
     }
-    result := make([]rune, 0)
-    for i := len(str[:beginning_of_suffix]) - 1; i >= 0; i-- {
-        result = append(result, runes[i])
-    }
-    return str + string(result)
+    return sprint
 }
 
-func ExampleTestMakePalindrome(t *testing.T) {
+func ExampleTestStringXor(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal("", MakePalindrome(""))
-    assert.Equal("catac", MakePalindrome("cat"))
-    assert.Equal("catac", MakePalindrome("cata"))
+    assert.Equal("100", StringXor("010", "110"))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestMakePalindrome(t)
+    ExampleTestStringXor(t)
 }
