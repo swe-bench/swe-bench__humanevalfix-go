@@ -4,42 +4,63 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
- 
-// Implement the Function F that takes n as a parameter,
-// and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
-// or the sum of numbers from 1 to i otherwise.
-// i starts from 1.
-// the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
-// Example:
-// F(5) == [1, 2, 6, 24, 15]
-func F(n int) []int {
+import (
+    "strconv"
+)
 
-    ret := make([]int, 0, 5)
-    for i:=1;i<n+1;i++{
-        if i%2 == 0 {
-            x := 1
-            for j:=1;j<i+1;j++{
-                x*=j
+// Given a positive integer n, return a tuple that has the number of even and odd
+// integer palindromes that fall within the range(1, n), inclusive.
+// 
+// Example 1:
+// 
+// Input: 3
+// Output: (1, 2)
+// Explanation:
+// Integer palindrome are 1, 2, 3. one of them is even, and two of them are odd.
+// 
+// Example 2:
+// 
+// Input: 12
+// Output: (4, 6)
+// Explanation:
+// Integer palindrome are 1, 2, 3, 4, 5, 6, 7, 8, 9, 11. four of them are even, and 6 of them are odd.
+// 
+// Note:
+// 1. 1 <= n <= 10^3
+// 2. returned tuple has the number of even and odd integer palindromes respectively.
+func EvenOddPalindrome(n int) [2]int {
+
+    is_palindrome := func (n int) bool {
+        s := strconv.Itoa(n)
+        for i := 0;i < len(s)>>1;i++ {
+            if s[i] != s[len(s)-i-1] {
+                return false
             }
-            ret = append(ret, x)
-        }else {
-            x := 0
-            for j:=1;j<i+1;j++{
-                x+=i
-            }
-            ret = append(ret, x)
+        }
+        return true
+    }
+
+    even_palindrome_count := 0
+    odd_palindrome_count := 0
+
+    for i :=1;i<n;i++ {
+        if i%2 == 1 && is_palindrome(i){
+                odd_palindrome_count ++
+        } else if i%2 == 0 && is_palindrome(i) {
+            even_palindrome_count ++
         }
     }
-    return ret
+    return [2]int{even_palindrome_count, odd_palindrome_count}
 }
 
-func ExampleTestF(t *testing.T) {
+func ExampleTestEvenOddPalindrome(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal([]int{1, 2, 6, 24, 15}, F(5))
+    assert.Equal([2]int{4,6}, EvenOddPalindrome(12))
+    assert.Equal([2]int{1,2}, EvenOddPalindrome(3))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestF(t)
+    ExampleTestEvenOddPalindrome(t)
 }
