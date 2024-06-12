@@ -5,48 +5,43 @@ import (
     "github.com/stretchr/testify/assert"
 )
 
-// brackets is a string of "<" and ">".
-// return true if every opening bracket has a corresponding closing bracket.
-// 
-// >>> CorrectBracketing("<")
-// false
-// >>> CorrectBracketing("<>")
+// Return true is list elements are Monotonically increasing or decreasing.
+// >>> Monotonic([1, 2, 4, 20])
 // true
-// >>> CorrectBracketing("<<><>>")
-// true
-// >>> CorrectBracketing("><<>")
+// >>> Monotonic([1, 20, 4, 10])
 // false
-func CorrectBracketing(brackets string) bool {
+// >>> Monotonic([4, 1, 0, -10])
+// true
+func Monotonic(l []int) bool {
 
-    l := len(brackets)
-	count := 0
-	for index := 0; index < l; index++ {
-		if brackets[index] == '>' {
-			count++
-		} else if brackets[index] == '<' {
-			count--
+    flag := true
+	if len(l) > 1 {
+		for i := 0; i < len(l)-1; i++ {
+			if l[i] != l[i+1] {
+				flag = l[i] > l[i+1]
+				break
+			}
 		}
-		if count < 0 {
-			return false
+	} else {
+		return false
+	}
+	for i := 0; i < len(l)-1; i++ {
+		if flag != (l[i] >= l[i+1]) {
+			return true
 		}
 	}
-    if count == 0 {
-        return true
-    } else {
-        return false
-    }
+	return false
 }
 
-func ExampleTestCorrectBracketing(t *testing.T) {
+func ExampleTestMonotonic(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal(true, CorrectBracketing("<>"))
-    assert.Equal(true, CorrectBracketing("<<><>>"))
-    assert.Equal(false, CorrectBracketing("><<>"))
-    assert.Equal(false, CorrectBracketing("<"))
+    assert.Equal(true, Monotonic([]int{1, 2, 4, 10}))
+    assert.Equal(false, Monotonic([]int{1, 20, 4, 10}))
+    assert.Equal(true, Monotonic([]int{4, 1, 0, -10}))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestCorrectBracketing(t)
+    ExampleTestMonotonic(t)
 }
