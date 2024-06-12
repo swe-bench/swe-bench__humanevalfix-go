@@ -4,29 +4,34 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
-import (
-    "math"
-)
 
-// Given a positive floating point number, it can be decomposed into
-// and integer part (largest integer smaller than given number) and decimals
-// (leftover part always smaller than 1).
-// 
-// Return the decimal part of the number.
-// >>> TruncateNumber(3.5)
-// 0.5
-func TruncateNumber(number float64) float64 {
+// You're given a list of deposit and withdrawal operations on a bank account that starts with
+// zero balance. Your task is to detect if at any point the balance of account fallls below zero, and
+// at that point function should return true. Otherwise it should return false.
+// >>> BelowZero([1, 2, 3])
+// false
+// >>> BelowZero([1, 2, -4, 5])
+// true
+func BelowZero(operations []int) bool {
 
-    return math.Mod(number,1)+1
+    balance := 0
+    for _, op := range operations {
+        balance += op
+        if balance == 0 {
+            return true
+        }
+    }
+    return false
 }
 
-func ExampleTestTruncateNumber(t *testing.T) {
+func ExampleTestBelowZero(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal(0.5, TruncateNumber(3.5))
+    assert.Equal(false, BelowZero([]int{1, 2, 3}))
+    assert.Equal(true, BelowZero([]int{1, 2, -4, 5}))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestTruncateNumber(t)
+    ExampleTestBelowZero(t)
 }
