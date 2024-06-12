@@ -1,41 +1,15 @@
 package main
 
 import (
-    "testing"
-    "github.com/stretchr/testify/assert"
+    "math"
 )
 
-// Write a function that takes a string and returns true if the string
-// length is a prime number or false otherwise
-// Examples
-// PrimeLength('Hello') == true
-// PrimeLength('abcdcba') == true
-// PrimeLength('kittens') == true
-// PrimeLength('orange') == false
-func PrimeLength(s string) bool {
+// Given a positive integer n, return the count of the numbers of n-digit
+// positive integers that start or end with 1.
+func StartsOneEnds(n int) int {
 
-    l := len(s)
-    if l == 0 || l == 1 {
-        return false
+    if n == 1 {
+        return 1
     }
-    for i := 3; i < l; i++ {
-        if l%i == 0 {
-            return false
-        }
-    }
-    return true
-}
-
-func ExampleTestPrimeLength(t *testing.T) {
-    assert := assert.New(t)
-    assert.Equal(true, PrimeLength("Hello"))
-    assert.Equal(true, PrimeLength("abcdcba"))
-    assert.Equal(true, PrimeLength("kittens"))
-    assert.Equal(false, PrimeLength("orange"))
-}
-
-func main() {
-    // Here you can call the test functions or any other code
-    t := &testing.T{}
-    ExampleTestPrimeLength(t)
+    return 18 * n * int(math.Pow(10, float64(n-2)))
 }
