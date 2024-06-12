@@ -4,35 +4,56 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
+import (
+    "sort"
+    "strings"
+)
 
-// Find how many times a given substring can be found in the original string. Count overlaping cases.
-// >>> HowManyTimes('', 'a')
-// 0
-// >>> HowManyTimes('aaa', 'a')
-// 3
-// >>> HowManyTimes('aaaa', 'aa')
-// 3
-func HowManyTimes(str string,substring string) int{
+// Input is a space-delimited string of numberals from 'zero' to 'nine'.
+// Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
+// Return the string with numbers sorted from smallest to largest
+// >>> SortNumbers('three one five')
+// 'one three five'
+func SortNumbers(numbers string) string{
 
-    times := 0
-	for i := 0; i < (len(str) - len(substring)); i++ {
-		if str[i:i+len(substring)] == substring {
-			times += 1
+    valueMap := map[string]int{
+		"zero":  0,
+		"one":   1,
+		"two":   2,
+		"three": 3,
+		"four":  4,
+		"five":  5,
+		"six":   6,
+		"seven": 7,
+		"eight": 8,
+		"nine":  9,
+	}
+	stringMap := make(map[int]string)
+	for s, i := range valueMap {
+		stringMap[i] = s
+	}
+	split := strings.Split(numbers, " ")
+	temp := make([]int, 0)
+	for _, s := range split {
+		if i, ok := valueMap[s]; ok {
+			temp = append(temp, i)
 		}
 	}
-	return times
+	result := make([]string, 0)
+	for _, i := range temp {
+		result = append(result, stringMap[i])
+	}
+	return strings.Join(result, " ")
 }
 
 
-func ExampleTestHowManyTimes(t *testing.T) {
+func ExampleTestSortNumbers(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal(0, HowManyTimes("", "a"))
-    assert.Equal(3, HowManyTimes("aaa", "a"))
-    assert.Equal(3, HowManyTimes("aaaa", "aa"))
+    assert.Equal("one three five", SortNumbers("three one five"))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestHowManyTimes(t)
+    ExampleTestSortNumbers(t)
 }
