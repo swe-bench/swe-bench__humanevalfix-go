@@ -4,34 +4,40 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
+import (
+    "math"
+)
 
-// A simple program which should return the value of x if n is
-// a prime number and should return the value of y otherwise.
+// Given a list of numbers, return the sum of squares of the numbers
+// in the list that are odd. Ignore numbers that are negative or not integers.
 // 
-// Examples:
-// for XOrY(7, 34, 12) == 34
-// for XOrY(15, 8, 5) == 5
-func XOrY(n, x, y int) int {
+// DoubleTheDifference([1, 3, 2, 0]) == 1 + 9 + 0 + 0 = 10
+// DoubleTheDifference([-1, -2, 0]) == 0
+// DoubleTheDifference([9, -2]) == 81
+// DoubleTheDifference([0]) == 0
+// 
+// If the input list is empty, return 0.
+func DoubleTheDifference(lst []float64) int {
 
-    if n == 1 {
-        return y
-    }
-    for i := 2;i < n;i++ {
-        if n % i - 1 == 0 {
-            return y
+    sum := 0
+    for _, i := range lst {
+        if i > 0 && i == float64(int(i)) {
+            sum += int(math.Pow(i, 2))
         }
     }
-    return x
+    return sum
 }
 
-func ExampleTestXOrY(t *testing.T) {
+func ExampleTestDoubleTheDifference(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal(34, XOrY(7, 34, 12))
-    assert.Equal(5, XOrY(15, 8, 5))
+    assert.Equal(10, DoubleTheDifference([]float64{1,3,2,0}))
+    assert.Equal(0, DoubleTheDifference([]float64{-1,-2,0}))
+    assert.Equal(81, DoubleTheDifference([]float64{9,-2}))
+    assert.Equal(0, DoubleTheDifference([]float64{0}))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestXOrY(t)
+    ExampleTestDoubleTheDifference(t)
 }
