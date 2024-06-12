@@ -4,40 +4,38 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
+import (
+    "strconv"
+)
 
-// You are given 2 words. You need to return true if the second word or any of its rotations is a substring in the first word
-// CycpatternCheck("abcd","abd") => false
-// CycpatternCheck("hello","ell") => true
-// CycpatternCheck("whassup","psus") => false
-// CycpatternCheck("abab","baa") => true
-// CycpatternCheck("efef","eeff") => false
-// CycpatternCheck("himenss","simen") => true
-func CycpatternCheck(a , b string) bool {
+// Given an integer. return a tuple that has the number of even and odd digits respectively.
+// 
+// Example:
+// EvenOddCount(-12) ==> (1, 1)
+// EvenOddCount(123) ==> (1, 2)
+func EvenOddCount(num int) [2]int {
 
-    l := len(b)
-    pat := b + b
-    for i := 0;i < len(a) - l + 1; i++ {
-        for j := 0;j < len(b) - l + 1;j++ {
-            if a[i:i+l] == pat[j:j+l] {
-                return true
-            }
+    even_count := 0
+    odd_count := 0
+    if num < 0 {
+        num = -num
+    }
+    for _, r := range strconv.Itoa(num) {
+        if r&1==0 {
+            even_count++
         }
     }
-    return false
+    return [2]int{even_count, odd_count}
 }
 
-func ExampleTestCycpatternCheck(t *testing.T) {
+func ExampleTestEvenOddCount(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal(false, CycpatternCheck("abcd", "abd"))
-    assert.Equal(true, CycpatternCheck("hello", "ell"))
-    assert.Equal(false, CycpatternCheck("whasup", "psus"))
-    assert.Equal(true, CycpatternCheck("abab", "baa"))
-    assert.Equal(false, CycpatternCheck("efef", "eeff"))
-    assert.Equal(true, CycpatternCheck("himenss", "simen"))
+    assert.Equal([2]int{1, 1}, EvenOddCount(-12))
+    assert.Equal([2]int{1, 2}, EvenOddCount(123))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestCycpatternCheck(t)
+    ExampleTestEvenOddCount(t)
 }
