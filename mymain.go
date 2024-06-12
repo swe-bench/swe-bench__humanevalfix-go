@@ -5,40 +5,36 @@ import (
     "github.com/stretchr/testify/assert"
 )
 import (
-    "sort"
+    "math"
 )
 
-// Given list of integers, return list in strange order.
-// Strange sorting, is when you start with the minimum value,
-// then maximum of the remaining integers, then minimum and so on.
-// 
-// Examples:
-// StrangeSortList([1, 2, 3, 4]) == [1, 4, 2, 3]
-// StrangeSortList([5, 5, 5, 5]) == [5, 5, 5, 5]
-// StrangeSortList([]) == []
-func StrangeSortList(lst []int) []int {
+// Given the lengths of the three sides of a triangle. Return the area of
+// the triangle rounded to 2 decimal points if the three sides form a valid triangle.
+// Otherwise return -1
+// Three sides make a valid triangle when the sum of any two sides is greater
+// than the third side.
+// Example:
+// TriangleArea(3, 4, 5) == 6.00
+// TriangleArea(1, 2, 10) == -1
+func TriangleArea(a float64, b float64, c float64) interface{} {
 
-    sort.Ints(lst)
-	result := make([]int, 0)
-	for i := 0; i < len(lst)/2; i++ {
-		result = append(result, lst[i])
-		result = append(result, lst[len(lst)-i-1])
+    if a+b <= c || a+c <= b || b+c <= a {
+		return -1
 	}
-	if len(lst)%2 == 0 {
-		result = append(result, lst[len(lst)/2])
-	}
-	return result
+	s := (a + b + c)
+	area := math.Pow(s * (s - a) * (s - b) * (s - c), 0.5)
+	area = math.Round(area*100)/100
+	return area
 }
 
-func ExampleTestStrangeSortList(t *testing.T) {
+func ExampleTestTriangleArea(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal([]int{1, 4, 2, 3}, StrangeSortList([]int{1,2, 3, 4}))
-    assert.Equal([]int{5, 5, 5, 5}, StrangeSortList([]int{5,5, 5, 5}))
-    assert.Equal([]int{}, StrangeSortList([]int{}))
+    assert.Equal(6.00, TriangleArea(3, 4, 5))
+    assert.Equal(-1, TriangleArea(1, 2, 10))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestStrangeSortList(t)
+    ExampleTestTriangleArea(t)
 }
