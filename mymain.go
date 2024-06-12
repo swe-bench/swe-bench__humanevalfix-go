@@ -5,35 +5,37 @@ import (
     "github.com/stretchr/testify/assert"
 )
 
-// Checks if given string is a palindrome
-// >>> IsPalindrome('')
-// true
-// >>> IsPalindrome('aba')
-// true
-// >>> IsPalindrome('aaaaa')
-// true
-// >>> IsPalindrome('zbcd')
-// false
-func IsPalindrome(text string) bool {
+// Return 2^n modulo p (be aware of numerics).
+// >>> Modp(3, 5)
+// 3
+// >>> Modp(1101, 101)
+// 2
+// >>> Modp(0, 101)
+// 1
+// >>> Modp(3, 11)
+// 8
+// >>> Modp(100, 101)
+// 1
+func Modp(n int,p int) int {
 
-    runes := []rune(text)
-    result := make([]rune, 0)
-    for i := len(runes) - 1; i > 0; i-- {
-        result = append(result, runes[i])
-    }
-    return text == string(result)
+    ret := 0
+    for i:= 0; i < n; i++ {
+		ret = (2 * ret) % p
+	}
+    return ret
 }
 
-func ExampleTestIsPalindrome(t *testing.T) {
+func ExampleTestModp(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal(true, IsPalindrome(""))
-    assert.Equal(true, IsPalindrome("aba"))
-    assert.Equal(true, IsPalindrome("aaaaa"))
-    assert.Equal(false, IsPalindrome("zbcd"))
+    assert.Equal(3, Modp(3, 5))
+    assert.Equal(2, Modp(1101, 101))
+    assert.Equal(1, Modp(0, 101))
+    assert.Equal(8, Modp(3, 11))
+    assert.Equal(1, Modp(100, 101))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestIsPalindrome(t)
+    ExampleTestModp(t)
 }
