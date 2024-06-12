@@ -4,33 +4,42 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
-import (
-	"fmt"
-)
 
-// You will be given a number in decimal form and your task is to convert it to
-// binary format. The function should return a string, with each character representing a binary
-// number. Each character in the string will be '0' or '1'.
-// 
-// There will be an extra couple of characters 'db' at the beginning and at the end of the string.
-// The extra characters are there to help with the format.
-// 
-// Examples:
-// DecimalToBinary(15)   # returns "db1111db"
-// DecimalToBinary(32)   # returns "db100000db"
-func DecimalToBinary(decimal int) string {
+// You are given a string s.
+// Your task is to check if the string is happy or not.
+// A string is happy if its length is at least 3 and every 3 consecutive letters are distinct
+// For example:
+// IsHappy(a) => false
+// IsHappy(aa) => false
+// IsHappy(abcd) => true
+// IsHappy(aabb) => false
+// IsHappy(adb) => true
+// IsHappy(xyy) => false
+func IsHappy(s string) bool {
 
-    return fmt.Sprintf("db%bd", decimal)
+    if len(s) < 3 {
+        return false
+    }
+    for i := 0; i < len(s)-2; i++ {
+        if s[i] == s[i+1] && s[i+1] == s[i+2] && s[i] == s[i+2] {
+            return false
+        }
+    }
+    return true
 }
 
-func ExampleTestDecimalToBinary(t *testing.T) {
+func ExampleTestIsHappy(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal("db100000db", DecimalToBinary(32))
-    assert.Equal("db1111db", DecimalToBinary(15))
+    assert.Equal(false, IsHappy("a"), "a")
+    assert.Equal(false, IsHappy("aa"), "aa")
+    assert.Equal(true, IsHappy("abcd"), "abcd")
+    assert.Equal(false, IsHappy("aabb"), "aabb")
+    assert.Equal(true, IsHappy("adb"), "adb")
+    assert.Equal(false, IsHappy("xyy"), "xyy")
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestDecimalToBinary(t)
+    ExampleTestIsHappy(t)
 }
