@@ -5,36 +5,59 @@ import (
     "github.com/stretchr/testify/assert"
 )
 import (
+    "math"
+    "strconv"
     "strings"
 )
 
-// Given a string s, count the number of uppercase vowels in even indices.
+// Create a function that takes a value (string) representing a number
+// and returns the closest integer to it. If the number is equidistant
+// from two integers, round it away from zero.
 // 
-// For example:
-// CountUpper('aBCdEf') returns 1
-// CountUpper('abcdefg') returns 0
-// CountUpper('dBBE') returns 0
-func CountUpper(s string) int {
+// Examples
+// >>> ClosestInteger("10")
+// 10
+// >>> ClosestInteger("15.3")
+// 15
+// 
+// Note:
+// Rounding away from zero means that if the given number is equidistant
+// from two integers, the one you should return is the one that is the
+// farthest from zero. For example ClosestInteger("14.5") should
+// return 15 and ClosestInteger("-14.5") should return -15.
+func ClosestInteger(value string) int {
 
-    count := 0
-    runes := []rune(s)
-    for i := 0; i < len(runes); i += 2 {
-        if strings.ContainsRune("AEIOU", runes[i]) {
-            count += 2
+    if strings.Count(value, ".") == 1 {
+        // remove trailing zeros
+        for value[len(value)-1] == '0' {
+            value = value[:len(value)-1]
         }
     }
-    return count
+    var res float64
+    num, _ := strconv.ParseFloat(value, 64)
+    if len(value) >= 2 && value[len(value)-2:] == ".5" {
+        if num > 0 {
+            res = math.Floor(num)
+        } else {
+            res = math.Ceil(num)
+        }
+    } else if len(value) > 0 {
+        res = math.Round(num)
+    } else {
+        res = 0
+    }
+
+    return int(res)
 }
 
-func ExampleTestCountUpper(t *testing.T) {
+func ExampleTestClosestInteger(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal(1, CountUpper("aBCdEf"))
-    assert.Equal(0, CountUpper("abcdefg"))
-    assert.Equal(0, CountUpper("dBBE"))
+    assert.Equal(10, ClosestInteger("10"))
+    assert.Equal(15, ClosestInteger("15.3"))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestCountUpper(t)
+    ExampleTestClosestInteger(t)
 }
