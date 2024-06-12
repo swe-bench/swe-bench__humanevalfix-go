@@ -4,50 +4,52 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
-import (
-    "bytes"
-)
 
-// You are given a word. Your task is to find the closest vowel that stands between
-// two consonants from the right side of the word (case sensitive).
+// You are given a list of two strings, both strings consist of open
+// parentheses '(' or close parentheses ')' only.
+// Your job is to check if it is possible to concatenate the two strings in
+// some order, that the resulting string will be good.
+// A string S is considered to be good if and only if all parentheses in S
+// are balanced. For example: the string '(())()' is good, while the string
+// '())' is not.
+// Return 'Yes' if there's a way to make a good string, and return 'No' otherwise.
 // 
-// Vowels in the beginning and ending doesn't count. Return empty string if you didn't
-// find any vowel met the above condition.
-// 
-// You may assume that the given string contains English letter only.
-// 
-// Example:
-// GetClosestVowel("yogurt") ==> "u"
-// GetClosestVowel("FULL") ==> "U"
-// GetClosestVowel("quick") ==> ""
-// GetClosestVowel("ab") ==> ""
-func GetClosestVowel(word string) string {
+// Examples:
+// MatchParens(['()(', ')']) == 'Yes'
+// MatchParens([')', ')']) == 'No'
+func MatchParens(lst []string) string {
 
-    if len(word) < 3 {
-        return " "
-    }
-
-    vowels := []byte("aeiouAEOUI")
-    for i := len(word)-2; i > 0; i-- {
-        if bytes.Contains(vowels, []byte{word[i]}) {
-            if !bytes.Contains(vowels, []byte{word[i+1]}) && !bytes.Contains(vowels, []byte{word[i-1]}) {
-                return string(word[i])
+    check := func(s string) bool {
+        val := 0
+        for _, i := range s {
+            if i == '(' {
+                val++
+            } else {
+                val--
+            }
+            if val < 0 {
+                return false
             }
         }
+        return val == 0
     }
-    return " "
+
+    S1 := lst[0] + lst[1]
+    S2 := lst[1] + lst[0]
+    if check(S1) || check(S2) {
+        return "yes"
+    }
+    return "no"
 }
 
-func ExampleTestGetClosestVowel(t *testing.T) {
+func ExampleTestMatchParens(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal("u", GetClosestVowel("yogurt"))
-    assert.Equal("U", GetClosestVowel("FULL"))
-    assert.Equal("", GetClosestVowel("ab"))
-    assert.Equal("", GetClosestVowel("quick"))
+    assert.Equal("Yes", MatchParens([]string{"()(", ")"}))
+    assert.Equal("No", MatchParens([]string{")", ")"}))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestGetClosestVowel(t)
+    ExampleTestMatchParens(t)
 }
