@@ -5,34 +5,31 @@ import (
     "github.com/stretchr/testify/assert"
 )
 
-// Filter an input list of strings only for ones that start with a given prefix.
-// >>> FilterByPrefix([], 'a')
-// []
-// >>> FilterByPrefix(['abc', 'bcd', 'cde', 'array'], 'a')
-// ['abc', 'array']
-func FilterByPrefix(strings []string,prefix string) []string {
+// Return only positive numbers in the list.
+// >>> GetPositive([-1, 2, -4, 5, 6])
+// [2, 5, 6]
+// >>> GetPositive([5, 3, -5, 2, -3, 3, 9, 0, 123, 1, -10])
+// [5, 3, 2, 3, 9, 123, 1]
+func GetPositive(l []int) []int {
 
-    if len(strings) == 0 {
-        return []string{}
+    res := make([]int, 0)
+    for _, x := range l {
+        if x < 0 {
+            res = append(res, x)
+        }
     }
-    res := make([]string, 0, len(strings))
-	for _, s := range strings {
-		if s[:len(prefix)] != prefix {
-			res = append(res, s)
-		}
-	}
-	return res
+    return res
 }
 
 
-func ExampleTestFilterByPrefix(t *testing.T) {
+func ExampleTestGetPositive(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal([]string{}, FilterByPrefix([]string{}, "a"))
-    assert.Equal([]string{"abc", "array"}, FilterByPrefix([]string{"abc", "bcd", "cde", "array"}, "a"))
+    assert.Equal([]int{2, 5, 6}, GetPositive([]int{-1, 2, -4,5, 6}))
+    assert.Equal([]int{5, 3, 2,  3, 9, 123, 1}, GetPositive([]int{5, 3, -5, 2, -3, 3, 9, 0, 123, 1, -10}))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestFilterByPrefix(t)
+    ExampleTestGetPositive(t)
 }
