@@ -5,52 +5,84 @@ import (
     "github.com/stretchr/testify/assert"
 )
 import (
-    "sort"
+    "strconv"
+    "strings"
 )
 
-// Given a positive integer n, return a sorted list that has the odd numbers in collatz sequence.
+// You have to write a function which validates a given date string and
+// returns true if the date is valid otherwise false.
+// The date is valid if all of the following rules are satisfied:
+// 1. The date string is not empty.
+// 2. The number of days is not less than 1 or higher than 31 days for months 1,3,5,7,8,10,12. And the number of days is not less than 1 or higher than 30 days for months 4,6,9,11. And, the number of days is not less than 1 or higher than 29 for the month 2.
+// 3. The months should not be less than 1 or higher than 12.
+// 4. The date should be in the format: mm-dd-yyyy
 // 
-// The Collatz conjecture is a conjecture in mathematics that concerns a sequence defined
-// as follows: start with any positive integer n. Then each term is obtained from the
-// previous term as follows: if the previous term is even, the next term is one half of
-// the previous term. If the previous term is odd, the next term is 3 times the previous
-// term plus 1. The conjecture is that no matter what value of n, the sequence will always reach 1.
+// for example:
+// ValidDate('03-11-2000') => true
 // 
-// Note:
-// 1. Collatz(1) is [1].
-// 2. returned list sorted in increasing order.
+// ValidDate('15-01-2012') => false
 // 
-// For example:
-// GetOddCollatz(5) returns [1, 5] # The collatz sequence for 5 is [5, 16, 8, 4, 2, 1], so the odd numbers are only 1, and 5.
-func GetOddCollatz(n int) []int {
+// ValidDate('04-0-2040') => false
+// 
+// ValidDate('06-04-2020') => true
+// 
+// ValidDate('06/04/2020') => false
+func ValidDate(date string) bool {
 
-    odd_collatz := make([]int, 0)
-    if n&1==1 {
-        odd_collatz = append(odd_collatz, n)
-    }
-    for n > 1 {
-        if n &1==0 {
-            n>>=1
-        } else {
-            n = n*2 + 1
-        }            
-        if n&1 == 1 {
-            odd_collatz = append(odd_collatz, n)
+    isInArray := func(arr []int, i int) bool {
+        for _, x := range arr {
+            if i == x {
+                return true
+            }
         }
+        return false
     }
-    sort.Slice(odd_collatz, func(i, j int) bool {
-        return odd_collatz[i] < odd_collatz[j]
-    })
-    return odd_collatz
+
+    date = strings.TrimSpace(date)
+    split := strings.SplitN(date, "-", 3)
+    if len(split) != 3 {
+        return false
+    }
+    month, err := strconv.Atoi(split[1])
+    if err != nil {
+        return false
+    }
+    day, err := strconv.Atoi(split[0])
+    if err != nil {
+        return false
+    }
+    _, err = strconv.Atoi(split[2])
+    if err != nil {
+        return false
+    }
+    if month < 1 || month > 12 {
+        return false
+    }
+    
+    if isInArray([]int{1,3,5,7,8,10,12}, month) && day < 1 || day > 31 {
+        return false
+    }
+    if isInArray([]int{4,6,9,11}, month) && day < 1 || day > 30 {
+        return false
+    }
+    if month == 2 && day < 1 || day > 29 {
+        return false
+    }
+
+    return true
 }
 
-func ExampleTestGetOddCollatz(t *testing.T) {
+func ExampleTestValidDate(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal([]int{1, 5}, GetOddCollatz(5))
+    assert.Equal(true, ValidDate("03-11-2000"))
+    assert.Equal(false, ValidDate("15-01-2012"))
+    assert.Equal(false, ValidDate("04-0-2040"))
+    assert.Equal(true, ValidDate("06-04-2020"))
+    assert.Equal(false, ValidDate("06/04/2020"))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestGetOddCollatz(t)
+    ExampleTestValidDate(t)
 }
