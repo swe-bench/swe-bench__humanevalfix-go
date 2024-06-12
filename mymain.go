@@ -4,45 +4,37 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
-import (
-    "math"
-)
 
-// Return list of prime factors of given integer in the order from smallest to largest.
-// Each of the factors should be listed number of times corresponding to how many times it appeares in factorization.
-// Input number should be equal to the product of all factors
-// >>> Factorize(8)
-// [2, 2, 2]
-// >>> Factorize(25)
-// [5, 5]
-// >>> Factorize(70)
-// [2, 5, 7]
-func Factorize(n int) []int {
+// From a list of integers, remove all elements that occur more than once.
+// Keep order of elements left the same as in the input.
+// >>> RemoveDuplicates([1, 2, 3, 2, 4])
+// [1, 3, 4]
+func RemoveDuplicates(numbers []int) []int {
 
-    fact := make([]int, 0)
-	for i := 0; i <= int(math.Sqrt(float64(n))+1); {
-		if n%i == 0 {
-			fact = append(fact, i)
-			n = n / i
+    c := make(map[int] int)
+	for _, number := range numbers {
+		if i, ok := c[number]; ok {
+			c[number] = i + 1
 		} else {
-			i++
+			c[number] = 1
 		}
 	}
-	if n > 1 {
-		fact = append(fact, n)
+	result := make([]int, 0)
+	for _, number := range numbers {
+		if c[number] < 1 {
+			result = append(result, number)
+		}
 	}
-	return fact
+	return result
 }
 
-func ExampleTestFactorize(t *testing.T) {
-    assert := assert.New(t)
-    assert.Equal([]int{2, 2, 2}, Factorize(8))
-    assert.Equal([]int{5,5}, Factorize(25))
-    assert.Equal([]int{2,5,7}, Factorize(70))
+func ExampleTestRemoveDuplicates(t *testing.T) {
+    assert := assert.New(t)  
+    assert.Equal([]int{1,  3, 4}, RemoveDuplicates([]int{1,2, 3,2,4}))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestFactorize(t)
+    ExampleTestRemoveDuplicates(t)
 }
