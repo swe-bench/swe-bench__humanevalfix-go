@@ -5,60 +5,46 @@ import (
     "github.com/stretchr/testify/assert"
 )
 import (
-    "strings"
+    "math"
 )
 
-// Create a function which takes a string representing a file's name, and returns
-// 'Yes' if the the file's name is valid, and returns 'No' otherwise.
-// A file's name is considered to be valid if and only if all the following conditions
-// are met:
-// - There should not be more than three digits ('0'-'9') in the file's name.
-// - The file's name contains exactly one dot '.'
-// - The substring before the dot should not be empty, and it starts with a letter from
-// the latin alphapet ('a'-'z' and 'A'-'Z').
-// - The substring after the dot should be one of these: ['txt', 'exe', 'dll']
+// This function will take a list of integers. For all entries in the list, the function shall square the integer entry if its index is a
+// multiple of 3 and will cube the integer entry if its index is a multiple of 4 and not a multiple of 3. The function will not
+// change the entries in the list whose indexes are not a multiple of 3 or 4. The function shall then return the sum of all entries.
+// 
 // Examples:
-// FileNameCheck("example.txt") # => 'Yes'
-// FileNameCheck("1example.dll") # => 'No' (the name should start with a latin alphapet letter)
-func FileNameCheck(file_name string) string {
+// For lst = [1,2,3] the output should be 6
+// For lst = []  the output should be 0
+// For lst = [-1,-5,2,-1,-5]  the output should be -126
+func SumSquares(lst []int) int {
 
-    suf := []string{"txt", "exe", "dll"}
-    lst := strings.Split(file_name, ".")
-    isInArray := func (arr []string, x string) bool {
-        for _, y := range arr {
-            if x == y {
-                return true
-            }
-        }
-        return false
-    }
-    switch {
-    case len(lst) != 2:
-        return "No"
-    case !isInArray(suf, lst[1]):
-        return "No"
-    case len(lst[0]) == 0:
-        return "No"
-    case 'a' > strings.ToLower(lst[0])[0] || strings.ToLower(lst[0])[0] > 'z':
-        return "No"
-    }
-    t := 0
-    for _, c := range lst[0] {
-        if '0' <= c && c <= '9' {
-            t++
+    result := make([]int, 0)
+    for i := 0;i < len(lst);i++ {
+        switch {
+        case i %3 == 0:
+            result = append(result, int(math.Pow(float64(lst[i]), 2)))
+        case i%3 != 0:
+            result = append(result, int(math.Pow(float64(lst[i]), 3)))
+        default:
+            result = append(result, lst[i])
         }
     }
-    return "Yes"
+    sum := 0
+    for _, x := range result {
+        sum += x
+    }
+    return sum
 }
 
-func ExampleTestFileNameCheck(t *testing.T) {
+func ExampleTestSumSquares(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal("Yes", FileNameCheck("example.txt"))
-    assert.Equal("No", FileNameCheck("1example.dll"))
+    assert.Equal(6, SumSquares([]int{1,2,3}))
+    assert.Equal(0, SumSquares([]int{}))
+    assert.Equal(-126, SumSquares([]int{-1,-5,2,-1,-5}))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestFileNameCheck(t)
+    ExampleTestSumSquares(t)
 }
