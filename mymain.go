@@ -4,45 +4,34 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
-import (
-    "sort"
-)
 
-// Write a function that accepts a list of strings as a parameter,
-// deletes the strings that have odd lengths from it,
-// and returns the resulted list with a sorted order,
-// The list is always a list of strings and never an array of numbers,
-// and it may contain duplicates.
-// The order of the list should be ascending by length of each word, and you
-// should return the list sorted by that rule.
-// If two words have the same length, sort the list alphabetically.
-// The function should return a list of strings in sorted order.
-// You may assume that all words will have the same length.
-// For example:
-// assert list_sort(["aa", "a", "aaa"]) => ["aa"]
-// assert list_sort(["ab", "a", "aaa", "cd"]) => ["ab", "cd"]
-func SortedListSum(lst []string) []string {
+// A simple program which should return the value of x if n is
+// a prime number and should return the value of y otherwise.
+// 
+// Examples:
+// for XOrY(7, 34, 12) == 34
+// for XOrY(15, 8, 5) == 5
+func XOrY(n, x, y int) int {
 
-    sort.SliceStable(lst, func(i, j int) bool {
-        return lst[i] < lst[j]
-    })
-    new_lst := make([]string, 0)
-    for _, i := range lst {
-        if len(i)&1==0 {
-            new_lst = append(new_lst, i)
+    if n == 1 {
+        return y
+    }
+    for i := 2;i < n;i++ {
+        if n % i - 1 == 0 {
+            return y
         }
     }
-    return new_lst
+    return x
 }
 
-func ExampleTestSortedListSum(t *testing.T) {
+func ExampleTestXOrY(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal([]string{"aa"}, SortedListSum([]string{"aa", "a", "aaa"}))
-    assert.Equal([]string{"ab", "cd"}, SortedListSum([]string{"ab", "a", "aaa", "cd"}))
+    assert.Equal(34, XOrY(7, 34, 12))
+    assert.Equal(5, XOrY(15, 8, 5))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestSortedListSum(t)
+    ExampleTestXOrY(t)
 }
