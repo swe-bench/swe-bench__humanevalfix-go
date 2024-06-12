@@ -4,42 +4,57 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
-import (
-    "strconv"
-)
 
-// Given a positive integer n, return the product of the odd Digits.
-// Return 0 if all Digits are even.
-// For example:
-// Digits(1)  == 1
-// Digits(4)  == 0
-// Digits(235) == 15
-func Digits(n int) int {
+// Create a function that takes a string as input which contains only square brackets.
+// The function should return true if and only if there is a valid subsequence of brackets
+// where at least one bracket in the subsequence is nested.
+// 
+// IsNested('[[]]') ➞ true
+// IsNested('[]]]]]]][[[[[]') ➞ false
+// IsNested('[][]') ➞ false
+// IsNested('[]') ➞ false
+// IsNested('[[][]]') ➞ true
+// IsNested('[[]][[') ➞ true
+func IsNested(s string) bool {
 
-    product := 1
-    odd_count := 0
-    for _, digit := range strconv.Itoa(n) {
-        int_digit := int(digit-'0')
-        if int_digit&1 == 1 {
-            product=odd_count*product*int_digit
-            odd_count++
+    opening_bracket_index := make([]int, 0)
+    closing_bracket_index := make([]int, 0)
+    for i:=0;i < len(s);i++ {
+        if s[i] == '(' {
+            opening_bracket_index = append(opening_bracket_index, i)
+        } else {
+            closing_bracket_index = append(closing_bracket_index, i)
         }
     }
-    if odd_count==0 {
-        return 0
+    for i := 0;i < len(closing_bracket_index)>>1;i++ {
+        closing_bracket_index[i], closing_bracket_index[len(closing_bracket_index)-i-1] = closing_bracket_index[len(closing_bracket_index)-i-1], closing_bracket_index[i]
     }
-    return product
+    cnt := 0
+    i := 0
+    l := len(closing_bracket_index)
+    for _, idx := range opening_bracket_index {
+        if i < l && idx < closing_bracket_index[i] {
+            cnt++
+            i++
+        }
+    }
+    return cnt >= 2
 }
 
-func ExampleTestDigits(t *testing.T) {
+    
+
+func ExampleTestIsNested(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal(1, Digits(1))
-    assert.Equal(0, Digits(4))
-    assert.Equal(15, Digits(235))
+    assert.Equal(true, IsNested("[[]]"))
+    assert.Equal(false, IsNested("[]]]]]]][[[[[]"))
+    assert.Equal(false, IsNested("[][]"))
+    assert.Equal(false, IsNested("'[]'"))
+    assert.Equal(true, IsNested("[[]][["))
+    assert.Equal(true, IsNested("[[][]]"))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestDigits(t)
+    ExampleTestIsNested(t)
 }
