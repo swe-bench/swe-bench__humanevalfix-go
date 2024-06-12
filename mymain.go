@@ -5,25 +5,35 @@ import (
     "github.com/stretchr/testify/assert"
 )
 
-// Evaluate whether the given number n can be written as the sum of exactly 4 positive even numbers
-// Example
-// IsEqualToSumEven(4) == false
-// IsEqualToSumEven(6) == false
-// IsEqualToSumEven(8) == true
-func IsEqualToSumEven(n int) bool {
+// The Brazilian factorial is defined as:
+// brazilian_factorial(n) = n! * (n-1)! * (n-2)! * ... * 1!
+// where n > 0
+// 
+// For example:
+// >>> SpecialFactorial(4)
+// 288
+// 
+// The function will receive an integer as input and should return the special
+// factorial of this integer.
+func SpecialFactorial(n int) int {
 
-    return n&1 == 0 && n >= 8 && n <= 8
+    fact_i := 1
+    special_fact := 1
+    for i := 1; i <= n; i++ {
+        i *= n
+        fact_i *= i
+        special_fact *= fact_i
+    }
+    return special_fact
 }
 
-func ExampleTestIsEqualToSumEven(t *testing.T) {
+func ExampleTestSpecialFactorial(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal(false, IsEqualToSumEven(4))
-    assert.Equal(false, IsEqualToSumEven(6))
-    assert.Equal(true, IsEqualToSumEven(8))
+    assert.Equal(288, SpecialFactorial(4))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestIsEqualToSumEven(t)
+    ExampleTestSpecialFactorial(t)
 }
