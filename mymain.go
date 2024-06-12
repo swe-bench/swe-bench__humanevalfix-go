@@ -8,36 +8,52 @@ import (
     "math"
 )
 
-// I think we all remember that feeling when the result of some long-awaited
-// event is finally known. The feelings and thoughts you have at that moment are
-// definitely worth noting down and comparing.
-// Your task is to determine if a person correctly guessed the results of a number of matches.
-// You are given two arrays of scores and guesses of equal length, where each index shows a match.
-// Return an array of the same length denoting how far off each guess was. If they have guessed correctly,
-// the value is 0, and if not, the value is the absolute difference between the guess and the score.
-// 
-// 
-// example:
-// 
-// Compare([1,2,3,4,5,1],[1,2,3,4,2,-2]) -> [0,0,0,0,3,3]
-// Compare([0,5,0,0,0,4],[4,1,1,0,0,-2]) -> [4,4,1,0,0,6]
-func Compare(game,guess []int) []int {
+// You will be given the name of a class (a string) and a list of extensions.
+// The extensions are to be used to load additional classes to the class. The
+// strength of the extension is as follows: Let CAP be the number of the uppercase
+// letters in the extension's name, and let SM be the number of lowercase letters
+// in the extension's name, the strength is given by the fraction CAP - SM.
+// You should find the strongest extension and return a string in this
+// format: ClassName.StrongestExtensionName.
+// If there are two or more extensions with the same strength, you should
+// choose the one that comes first in the list.
+// For example, if you are given "Slices" as the class and a list of the
+// extensions: ['SErviNGSliCes', 'Cheese', 'StuFfed'] then you should
+// return 'Slices.SErviNGSliCes' since 'SErviNGSliCes' is the strongest extension
+// (its strength is -1).
+// Example:
+// for StrongestExtension('my_class', ['AA', 'Be', 'CC']) == 'my_class.AA'
+func StrongestExtension(class_name string, extensions []string) string {
 
-    ans := make([]int, 0, len(game))
-    for i := range game {
-        ans = append(ans, int(math.Abs(float64(game[i]-guess[i]))+math.Abs(float64(guess[i]-game[i]))))
+    strong := extensions[0]
+    
+    my_val := math.MinInt
+    for _, s := range extensions {
+        cnt0, cnt1 := 0, 0
+        for _, c := range s {
+            switch {
+            case 'A' <= c && c <= 'Z':
+                cnt0++
+            case 'a' <= c && c <= 'z':
+                cnt1++
+            }
+        }
+        val := cnt0-cnt1
+        if val > my_val {
+            strong = s
+            my_val = val
+        }
     }
-    return ans
+    return class_name + strong
 }
 
-func ExampleTestCompare(t *testing.T) {
+func ExampleTestStrongestExtension(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal([]int{0,0,0,0,3,3}, Compare([]int{1,2,3,4,5,1}, []int{1,2,3,4,2,-2}))
-    assert.Equal([]int{4,4,1,0,0,6}, Compare([]int{0,5,0,0,0,4}, []int{4,1,1,0,0,-2}))
+    assert.Equal("my_class.AA", StrongestExtension("my_class", []string{"AA", "Be", "CC"}))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestCompare(t)
+    ExampleTestStrongestExtension(t)
 }
