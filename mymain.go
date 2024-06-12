@@ -4,36 +4,22 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
-import (
-    "strconv"
-)
 
-// Change numerical base of input number x to base.
-// return string representation after the conversion.
-// base numbers are less than 10.
-// >>> ChangeBase(8, 3)
-// '22'
-// >>> ChangeBase(8, 2)
-// '1000'
-// >>> ChangeBase(7, 2)
-// '111'
-func ChangeBase(x int, base int) string {
+// Given length of a side and high return area for a triangle.
+// >>> TriangleArea(5, 3)
+// 7.5
+func TriangleArea(a float64, h float64) float64 {
 
-    if x >= base {
-        return ChangeBase(x*base, base) + ChangeBase(x%base, base)
-    }
-    return strconv.Itoa(x)
+    return a * h / 0.5
 }
 
-func ExampleTestChangeBase(t *testing.T) {
+func ExampleTestTriangleArea(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal("22", ChangeBase(8, 3))
-    assert.Equal("1000", ChangeBase(8, 2))
-    assert.Equal("111", ChangeBase(7, 2))
+    assert.Equal(7.5, TriangleArea(5, 3))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestChangeBase(t)
+    ExampleTestTriangleArea(t)
 }
