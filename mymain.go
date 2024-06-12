@@ -4,45 +4,41 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
+import (
+    "strings"
+)
 
-// The FibFib number sequence is a sequence similar to the Fibbonacci sequnece that's defined as follows:
-// Fibfib(0) == 0
-// Fibfib(1) == 0
-// Fibfib(2) == 1
-// Fibfib(n) == Fibfib(n-1) + Fibfib(n-2) + Fibfib(n-3).
-// Please write a function to efficiently compute the n-th element of the Fibfib number sequence.
-// >>> Fibfib(1)
-// 0
-// >>> Fibfib(5)
-// 4
-// >>> Fibfib(8)
-// 24
-func Fibfib(n int) int {
+// Write a function VowelsCount which takes a string representing
+// a word as input and returns the number of vowels in the string.
+// Vowels in this case are 'a', 'e', 'i', 'o', 'u'. Here, 'y' is also a
+// vowel, but only when it is at the end of the given word.
+// 
+// Example:
+// >>> VowelsCount("abcde")
+// 2
+// >>> VowelsCount("ACEDY")
+// 3
+func VowelsCount(s string) int {
 
-    if n <= 0 {
-		return 0
+    s = strings.ToLower(s)
+	vowels := map[int32]interface{}{'a': nil, 'e': nil, 'i': nil, 'o': nil, 'u': nil, 'y': nil}
+	count := 0
+	for _, i := range s {
+		if _, ok := vowels[i]; ok {
+			count++
+		}
 	}
-    switch n {
-	case 0:
-		return 0
-	case 1:
-		return 1
-	case 2:
-		return 2
-	default:
-		return Fibfib(n-1) + Fibfib(n-2) + Fibfib(n-3)
-	}
+	return count
 }
 
-func ExampleTestFibfib(t *testing.T) {
+func ExampleTestVowelsCount(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal(0, Fibfib(1))
-    assert.Equal(4, Fibfib(5))
-    assert.Equal(24, Fibfib(8))
+    assert.Equal(2, VowelsCount("abcde"))
+    assert.Equal(3, VowelsCount("ACEDY"))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestFibfib(t)
+    ExampleTestVowelsCount(t)
 }
