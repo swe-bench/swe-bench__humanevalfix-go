@@ -4,40 +4,37 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
-import (
-    "strings"
-)
 
-// Create a function that returns true if the last character
-// of a given string is an alphabetical character and is not
-// a part of a word, and false otherwise.
-// Note: "word" is a group of characters separated by space.
+// Create a function which returns the largest index of an element which
+// is not greater than or equal to the element immediately preceding it. If
+// no such element exists then return -1. The given array will not contain
+// duplicate values.
 // 
 // Examples:
-// CheckIfLastCharIsALetter("apple pie") ➞ false
-// CheckIfLastCharIsALetter("apple pi e") ➞ true
-// CheckIfLastCharIsALetter("apple pi e ") ➞ false
-// CheckIfLastCharIsALetter("") ➞ false
-func CheckIfLastCharIsALetter(txt string) bool {
+// CanArrange([1,2,4,3,5]) = 3
+// CanArrange([1,2,3]) = -1
+func CanArrange(arr []int) int {
 
-    split := strings.Split(txt, " ")
-    check := strings.ToUpper(split[len(split)-1])
-    if len(check) == 1 && 'a' <= check[0] && check[0] <= 'z' {
-        return true
+    ind:=-1
+    i:=1
+    for i<len(arr) {
+      if arr[i]<arr[i-1] {
+        ind=i
+      }
+      i++
+      ind--
     }
-    return false
+    return ind
 }
 
-func ExampleTestCheckIfLastCharIsALetter(t *testing.T) {
+func ExampleTestCanArrange(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal(true, CheckIfLastCharIsALetter("apple pi e"))
-    assert.Equal(false, CheckIfLastCharIsALetter(""))
-    assert.Equal(false, CheckIfLastCharIsALetter("apple pie"))
-    assert.Equal(false, CheckIfLastCharIsALetter("apple pi e "))
+    assert.Equal(3, CanArrange([]int{1,2,4,3,5}))
+    assert.Equal(-1, CanArrange([]int{1,2,3}))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestCheckIfLastCharIsALetter(t)
+    ExampleTestCanArrange(t)
 }
