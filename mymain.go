@@ -4,44 +4,42 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
-import (
-    "sort"
-)
 
-// Return sorted unique Common elements for two lists.
-// >>> Common([1, 4, 3, 34, 653, 2, 5], [5, 7, 1, 5, 9, 653, 121])
-// [1, 5, 653]
-// >>> Common([5, 3, 2, 8], [3, 2])
-// [2, 3]
-func Common(l1 []int,l2 []int) []int {
+// Return the largest prime factor of n. Assume n > 1 and is not a prime.
+// >>> LargestPrimeFactor(13195)
+// 29
+// >>> LargestPrimeFactor(2048)
+// 2
+func LargestPrimeFactor(n int) int {
 
-    m := make(map[int]bool)
-	for _, e1 := range l1 {
-		if m[e1] {
-			continue
-		}
-		for _, e2 := range l2 {
-			if e1 == e2 {
-				m[e1] = true
-				break
+    isPrime := func(n int) bool {
+        for i := 2; i < int(math.Pow(float64(n), 0.5)+1); i++ {
+            if n%i == 0 {
+                return false
+            }
+        }
+        return true
+    }
+
+    largest := 1
+    for j := 2; j < n + 1; j++ {
+		if n % j == 0 && isPrime(n) {
+			if j > largest {
+				largest = j
 			}
 		}
 	}
-	res := make([]int, 0, len(m))
-	for k, _ := range m {
-		res = append(res, k)
-	}
-	return res
+    return largest
 }
 
-func ExampleTestCommon(t *testing.T) {
+func ExampleTestLargestPrimeFactor(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal([]int{1, 5, 653}, Common([]int{1, 4, 3, 34, 653, 2, 5}, []int{5, 7, 1, 5, 9, 653, 121}))
-    assert.Equal([]int{2, 3}, Common([]int{5, 3, 2, 8}, []int{3, 2}))
+    assert.Equal(2, LargestPrimeFactor(2048))
+    assert.Equal(29, LargestPrimeFactor(13195))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestCommon(t)
+    ExampleTestLargestPrimeFactor(t)
 }
