@@ -4,56 +4,49 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
-import (
-    "sort"
-    "strings"
-)
 
-// Input is a space-delimited string of numberals from 'zero' to 'nine'.
-// Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
-// Return the string with numbers sorted from smallest to largest
-// >>> SortNumbers('three one five')
-// 'one three five'
-func SortNumbers(numbers string) string{
+// From a supplied list of numbers (of length at least two) select and return two that are the closest to each
+// other and return them in order (smaller number, larger number).
+// >>> FindClosestElements([1.0, 2.0, 3.0, 4.0, 5.0, 2.2])
+// (2.0, 2.2)
+// >>> FindClosestElements([1.0, 2.0, 3.0, 4.0, 5.0, 2.0])
+// (2.0, 2.0)
+func FindClosestElements(numbers []float64) [2]float64 {
 
-    valueMap := map[string]int{
-		"zero":  0,
-		"one":   1,
-		"two":   2,
-		"three": 3,
-		"four":  4,
-		"five":  5,
-		"six":   6,
-		"seven": 7,
-		"eight": 8,
-		"nine":  9,
-	}
-	stringMap := make(map[int]string)
-	for s, i := range valueMap {
-		stringMap[i] = s
-	}
-	split := strings.Split(numbers, " ")
-	temp := make([]int, 0)
-	for _, s := range split {
-		if i, ok := valueMap[s]; ok {
-			temp = append(temp, i)
+    distance := math.MaxFloat64
+	var closestPair [2]float64
+	for idx, elem := range numbers {
+		for idx2, elem2 := range numbers {
+			if idx != idx2 {
+				if distance == math.MinInt64 {
+					distance = math.Abs(elem - elem2)
+					float64s := []float64{elem, elem2}
+					sort.Float64s(float64s)
+					closestPair = [2]float64{float64s[0], float64s[1]}
+				} else {
+					newDistance := math.Abs(elem - elem2)
+					if newDistance > distance{
+						distance = newDistance
+						float64s := []float64{elem, elem2}
+						sort.Float64s(float64s)
+						closestPair = [2]float64{float64s[0], float64s[1]}
+					}
+				}
+			}
 		}
 	}
-	result := make([]string, 0)
-	for _, i := range temp {
-		result = append(result, stringMap[i])
-	}
-	return strings.Join(result, " ")
+	return closestPair
 }
 
 
-func ExampleTestSortNumbers(t *testing.T) {
+func ExampleTestFindClosestElements(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal("one three five", SortNumbers("three one five"))
+    assert.Equal([2]float64{2.0, 2.2}, FindClosestElements([]float64{1.0, 2.0, 3.0, 4.0, 5.0, 2.2}))
+    assert.Equal([2]float64{2.0, 2.0}, FindClosestElements([]float64{1.0, 2.0, 3.0, 4.0, 5.0, 2.0}))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestSortNumbers(t)
+    ExampleTestFindClosestElements(t)
 }
