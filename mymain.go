@@ -5,34 +5,38 @@ import (
     "github.com/stretchr/testify/assert"
 )
 import (
-    "strconv"
+    "strings"
 )
 
-// Return a string containing space-delimited numbers starting from 0 upto n inclusive.
-// >>> StringSequence(0)
-// '0'
-// >>> StringSequence(5)
-// '0 1 2 3 4 5'
-func StringSequence(n int) string{
+// Given a string, find out how many distinct characters (regardless of case) does it consist of
+// >>> CountDistinctCharacters('xyzXYZ')
+// 3
+// >>> CountDistinctCharacters('Jerry')
+// 4
+func CountDistinctCharacters(str string) int{
 
-    var seq string
-    for i := 0; i < n; i++ {
-        seq += strconv.Itoa(i)
-        if i != n {
-            seq += " "
-        }
-    }
-    return seq
+    count := 0
+	set := make(map[rune]bool)
+	for _, i := range str {
+		if set[i] == true {
+			continue
+		} else {
+			set[i] = true
+			count++
+		}
+	}
+	return count
 }
 
-func ExampleTestStringSequence(t *testing.T) {
+
+func ExampleTestCountDistinctCharacters(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal("0", StringSequence(0))
-    assert.Equal("0 1 2 3 4 5", StringSequence(5))
+    assert.Equal(3, CountDistinctCharacters("xyzXYZ"))
+    assert.Equal(4, CountDistinctCharacters("Jerry"))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestStringSequence(t)
+    ExampleTestCountDistinctCharacters(t)
 }
