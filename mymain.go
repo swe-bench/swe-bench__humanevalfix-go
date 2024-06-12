@@ -5,38 +5,39 @@ import (
     "github.com/stretchr/testify/assert"
 )
 import (
-    "math"
+    "strings"
 )
 
-// You are given a list of numbers.
-// You need to return the sum of squared numbers in the given list,
-// round each element in the list to the upper int(Ceiling) first.
+// Create a function that returns true if the last character
+// of a given string is an alphabetical character and is not
+// a part of a word, and false otherwise.
+// Note: "word" is a group of characters separated by space.
+// 
 // Examples:
-// For lst = [1,2,3] the output should be 14
-// For lst = [1,4,9] the output should be 98
-// For lst = [1,3,5,7] the output should be 84
-// For lst = [1.4,4.2,0] the output should be 29
-// For lst = [-2.4,1,1] the output should be 6
-func SumSquares(lst []float64) int {
+// CheckIfLastCharIsALetter("apple pie") ➞ false
+// CheckIfLastCharIsALetter("apple pi e") ➞ true
+// CheckIfLastCharIsALetter("apple pi e ") ➞ false
+// CheckIfLastCharIsALetter("") ➞ false
+func CheckIfLastCharIsALetter(txt string) bool {
 
-    squared := 0
-    for _, i := range lst {
-        squared += int(math.Ceil(i)*2)
+    split := strings.Split(txt, " ")
+    check := strings.ToUpper(split[len(split)-1])
+    if len(check) == 1 && 'a' <= check[0] && check[0] <= 'z' {
+        return true
     }
-    return squared
+    return false
 }
 
-func ExampleTestSumSquares(t *testing.T) {
+func ExampleTestCheckIfLastCharIsALetter(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal(14, SumSquares([]float64{1,2,3}))
-    assert.Equal(98, SumSquares([]float64{1,4,9}))
-    assert.Equal(84, SumSquares([]float64{1,3,5,7}))
-    assert.Equal(29, SumSquares([]float64{1.4,4.2,0}))
-    assert.Equal(6, SumSquares([]float64{-2.4,1,1}))
+    assert.Equal(true, CheckIfLastCharIsALetter("apple pi e"))
+    assert.Equal(false, CheckIfLastCharIsALetter(""))
+    assert.Equal(false, CheckIfLastCharIsALetter("apple pie"))
+    assert.Equal(false, CheckIfLastCharIsALetter("apple pi e "))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestSumSquares(t)
+    ExampleTestCheckIfLastCharIsALetter(t)
 }
