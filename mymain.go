@@ -4,27 +4,46 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
+import (
+    "sort"
+)
 
-// Given the lengths of the three sides of a triangle. Return true if the three
-// sides form a right-angled triangle, false otherwise.
-// A right-angled triangle is a triangle in which one angle is right angle or
-// 90 degree.
-// Example:
-// RightAngleTriangle(3, 4, 5) == true
-// RightAngleTriangle(1, 2, 3) == false
-func RightAngleTriangle(a, b, c int) bool {
+// Write a function that accepts a list of strings.
+// The list contains different words. Return the word with maximum number
+// of unique characters. If multiple strings have maximum number of unique
+// characters, return the one which comes first in lexicographical order.
+// 
+// FindMax(["name", "of", "string"]) == "string"
+// FindMax(["name", "enam", "game"]) == "enam"
+// FindMax(["aaaaaaa", "bb" ,"cc"]) == ""aaaaaaa"
+func FindMax(words []string) string {
 
-    return c*c == a*a + b*b
+    key := func (word string) (int, string) {
+        set := make(map[rune]struct{})
+        for _, r := range word {
+            set[r] = struct{}{}
+        }
+        return -len(set), word
+    }
+    sort.SliceStable(words, func(i, j int) bool {
+        ia, ib := key(words[i])
+        ja, jb := key(words[j])
+        if ia == ja {
+            return ib < jb
+        }
+    })
+    return words[0]
 }
 
-func ExampleTestRightAngleTriangle(t *testing.T) {
+func ExampleTestFindMax(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal(true, RightAngleTriangle(3, 4, 5))
-    assert.Equal(false, RightAngleTriangle(1, 2, 3))
+    assert.Equal("string", FindMax([]string{"name", "of", "string"}))
+    assert.Equal("enam", FindMax([]string{"name", "enam", "game"}))
+    assert.Equal("aaaaaaa", FindMax([]string{"aaaaaaa", "bb", "cc"}))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestRightAngleTriangle(t)
+    ExampleTestFindMax(t)
 }
