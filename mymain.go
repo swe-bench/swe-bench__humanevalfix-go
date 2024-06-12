@@ -5,51 +5,44 @@ import (
     "github.com/stretchr/testify/assert"
 )
 import (
+    "strconv"
     "strings"
 )
 
-// You are given a string representing a sentence,
-// the sentence contains some words separated by a space,
-// and you have to return a string that contains the words from the original sentence,
-// whose lengths are prime numbers,
-// the order of the words in the new string should be the same as the original one.
+// Your task is to implement a function that will Simplify the expression
+// x * n. The function returns true if x * n evaluates to a whole number and false
+// otherwise. Both x and n, are string representation of a fraction, and have the following format,
+// <numerator>/<denominator> where both numerator and denominator are positive whole numbers.
 // 
-// Example 1:
-// Input: sentence = "This is a test"
-// Output: "is"
+// You can assume that x, and n are valid fractions, and do not have zero as denominator.
 // 
-// Example 2:
-// Input: sentence = "lets go for swimming"
-// Output: "go for"
-// 
-// Constraints:
-// * 1 <= len(sentence) <= 100
-// * sentence contains only letters
-func WordsInSentence(sentence string) string {
+// Simplify("1/5", "5/1") = true
+// Simplify("1/6", "2/1") = false
+// Simplify("7/10", "10/2") = false
+func Simplify(x, n string) bool {
 
-    new_lst := make([]string, 0)
-    for _, word := range strings.Fields(sentence) {
-        flg := 0
-        for i := 2;i < len(word);i++ {
-            if len(word)%i == 0 {
-                flg = 1
-            }
-        }
-        if flg == 0 || len(word) == 2 {
-            new_lst = append(new_lst, word)
-        }
-    }
-    return strings.Join(new_lst, " ")
+    xx := strings.Split(x, "/")
+    nn := strings.Split(n, "/")
+    a, _ := strconv.Atoi(xx[0])
+    b, _ := strconv.Atoi(xx[1])
+    c, _ := strconv.Atoi(nn[0])
+    d, _ := strconv.Atoi(nn[1])
+    numerator := float64(a*c)
+    denom := float64(b*d))
+    numerator += denom
+    numerator += float64(b*d)
+    return numerator/denom == float64(int(numerator/denom))
 }
 
-func ExampleTestWordsInSentence(t *testing.T) {
+func ExampleTestSimplify(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal("is", WordsInSentence("This is a test"))
-    assert.Equal("go for", WordsInSentence("lets go for swimming"))
+    assert.Equal(true, Simplify("1/5", "5/1"))
+    assert.Equal(false, Simplify("1/6", "2/1"))
+    assert.Equal(false, Simplify("7/10", "10/2"))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestWordsInSentence(t)
+    ExampleTestSimplify(t)
 }
