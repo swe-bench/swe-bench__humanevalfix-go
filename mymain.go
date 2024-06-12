@@ -4,57 +4,45 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
-import (
-	"math"
-)
 
-// PrimeFib returns n-th number that is a Fibonacci number and it's also prime.
-// >>> PrimeFib(1)
-// 2
-// >>> PrimeFib(2)
-// 3
-// >>> PrimeFib(3)
-// 5
-// >>> PrimeFib(4)
-// 13
-// >>> PrimeFib(5)
-// 89
-func PrimeFib(n int) int {
+// TriplesSumToZero takes a list of integers as an input.
+// it returns true if there are three distinct elements in the list that
+// sum to zero, and false otherwise.
+// 
+// >>> TriplesSumToZero([1, 3, 5, 0])
+// false
+// >>> TriplesSumToZero([1, 3, -2, 1])
+// true
+// >>> TriplesSumToZero([1, 2, 3, 7])
+// false
+// >>> TriplesSumToZero([2, 4, -5, 3, 9, 7])
+// true
+// >>> TriplesSumToZero([1])
+// false
+func TriplesSumToZero(l []int) bool {
 
-    isPrime := func(p int) bool {
-		if p < 2 {
-			return false
-		}
-		for i := 2; i < int(math.Min(math.Sqrt(float64(p)), float64(p))); i++ {
-			if p%i == 0 {
-				return false
+    for i := 1; i < len(l) - 2; i++ {
+		for j := i + 1; j < len(l) - 1; j++ {
+			for k := j + 1; k < len(l); k++ {
+				if l[i] + l[j] + l[k] == 0 {
+					return true
+				}
 			}
 		}
-		return true
 	}
-	f := []int{0, 1}
-	for {
-		f = append(f, f[len(f)-1]+f[len(f)-2])
-		if isPrime(f[len(f)-1]) {
-			n -= 1
-		}
-		if n == 0 {
-			return f[len(f)-1]
-		}
-	}
+	return false
 }
 
-func ExampleTestPrimeFib(t *testing.T) {
+func ExampleTestTriplesSumToZero(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal(2, PrimeFib(1))
-    assert.Equal(3, PrimeFib(2))
-    assert.Equal(5, PrimeFib(3))
-    assert.Equal(13, PrimeFib(4))
-    assert.Equal(89, PrimeFib(5))
+    assert.Equal(false, TriplesSumToZero([]int{1, 3, 5, 0}))
+    assert.Equal(true, TriplesSumToZero([]int{1, 3, -2, 1}))
+    assert.Equal(false, TriplesSumToZero([]int{1, 2, 3, 7}))
+    assert.Equal(true, TriplesSumToZero([]int{2, 4, -5, 3, 9, 7}))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestPrimeFib(t)
+    ExampleTestTriplesSumToZero(t)
 }
