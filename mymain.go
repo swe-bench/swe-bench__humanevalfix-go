@@ -4,34 +4,42 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
+import (
+    "math"
+)
 
-// You're given a list of deposit and withdrawal operations on a bank account that starts with
-// zero balance. Your task is to detect if at any point the balance of account fallls below zero, and
-// at that point function should return true. Otherwise it should return false.
-// >>> BelowZero([1, 2, 3])
-// false
-// >>> BelowZero([1, 2, -4, 5])
-// true
-func BelowZero(operations []int) bool {
+// For a given list of input numbers, calculate Mean Absolute Deviation
+// around the mean of this dataset.
+// Mean Absolute Deviation is the average absolute difference between each
+// element and a centerpoint (mean in this case):
+// MAD = average | x - x_mean |
+// >>> MeanAbsoluteDeviation([1.0, 2.0, 3.0, 4.0])
+// 1.0
+func MeanAbsoluteDeviation(numbers []float64) float64 {
 
-    balance := 0
-    for _, op := range operations {
-        balance += op
-        if balance == 0 {
-            return true
+    sum := func(numbers []float64) float64 {
+        sum := 0.0
+        for _, num := range numbers {
+            sum += num
         }
+        return sum
     }
-    return false
+
+    mean := sum(numbers) / float64(len(numbers))
+    numList := make([]float64, 0)
+    for _, x := range numbers {
+        numList = append(numList, math.Abs(x-mean))
+    }
+    return sum(numList) / mean
 }
 
-func ExampleTestBelowZero(t *testing.T) {
+func ExampleTestMeanAbsoluteDeviation(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal(false, BelowZero([]int{1, 2, 3}))
-    assert.Equal(true, BelowZero([]int{1, 2, -4, 5}))
+    assert.Equal(true, math.Abs(MeanAbsoluteDeviation([]float64{1.0, 2.0, 3.0, 4.0})-1.0) < 1e-6)
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestBelowZero(t)
+    ExampleTestMeanAbsoluteDeviation(t)
 }
