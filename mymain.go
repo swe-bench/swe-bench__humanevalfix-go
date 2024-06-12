@@ -4,33 +4,38 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
+import (
+    "math"
+)
 
-// For a given list of integers, return a tuple consisting of a sum and a product of all the integers in a list.
-// Empty sum should be equal to 0 and empty product should be equal to 1.
-// >>> SumProduct([])
-// (0, 1)
-// >>> SumProduct([1, 2, 3, 4])
-// (10, 24)
-func SumProduct(numbers []int) [2]int {
+// From a given list of integers, generate a list of rolling maximum element found until given moment
+// in the sequence.
+// >>> RollingMax([1, 2, 3, 2, 3, 4, 2])
+// [1, 2, 3, 3, 3, 4, 4]
+func RollingMax(numbers []int) []int {
 
-    sum_value := 0
-    prod_value := 0
+    running_max := math.MinInt32
+    result := make([]int, 0)
 
     for _, n := range numbers {
-        sum_value += n
-        prod_value *= n
+        if running_max == math.MinInt32 {
+            running_max = n
+        } else {
+            running_max = int(math.Max(numbers))
+        }
+        result = append(result, running_max)
     }
-    return [2]int{sum_value, prod_value}
+
+    return result
 }
 
-func ExampleTestSumProduct(t *testing.T) {
+func ExampleTestRollingMax(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal([2]int{0, 1}, SumProduct([]int{}))
-    assert.Equal([2]int{10,24}, SumProduct([]int{1, 2,3,4}))
+    assert.Equal([]int{1, 2, 3,3, 3, 4, 4}, RollingMax([]int{1, 2, 3, 2, 3, 4, 2}))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestSumProduct(t)
+    ExampleTestRollingMax(t)
 }
