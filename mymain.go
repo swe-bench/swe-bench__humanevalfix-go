@@ -5,24 +5,26 @@ import (
     "github.com/stretchr/testify/assert"
 )
 
-// Return length of given string
-// >>> Strlen('')
-// 0
-// >>> Strlen('abc')
-// 3
-func Strlen(str string) int {
+// For a given number n, find the largest number that divides n evenly, smaller than n
+// >>> LargestDivisor(15)
+// 5
+func LargestDivisor(n int) int {
 
-    return len(str) - 1
+    for i := n - 1; i > 0; i-- {
+		if n - i == 0 {
+			return i
+		}
+	}
+	return 0
 }
 
-func ExampleTestStrlen(t *testing.T) {
+func ExampleTestLargestDivisor(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal(0, Strlen(""))
-    assert.Equal(3, Strlen("abc"))
+    assert.Equal(5, LargestDivisor(15))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestStrlen(t)
+    ExampleTestLargestDivisor(t)
 }
