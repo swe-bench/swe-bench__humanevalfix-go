@@ -5,46 +5,51 @@ import (
     "github.com/stretchr/testify/assert"
 )
 import (
-    "math"
+    "strings"
 )
 
-// This function will take a list of integers. For all entries in the list, the function shall square the integer entry if its index is a
-// multiple of 3 and will cube the integer entry if its index is a multiple of 4 and not a multiple of 3. The function will not
-// change the entries in the list whose indexes are not a multiple of 3 or 4. The function shall then return the sum of all entries.
+// You are given a string representing a sentence,
+// the sentence contains some words separated by a space,
+// and you have to return a string that contains the words from the original sentence,
+// whose lengths are prime numbers,
+// the order of the words in the new string should be the same as the original one.
 // 
-// Examples:
-// For lst = [1,2,3] the output should be 6
-// For lst = []  the output should be 0
-// For lst = [-1,-5,2,-1,-5]  the output should be -126
-func SumSquares(lst []int) int {
+// Example 1:
+// Input: sentence = "This is a test"
+// Output: "is"
+// 
+// Example 2:
+// Input: sentence = "lets go for swimming"
+// Output: "go for"
+// 
+// Constraints:
+// * 1 <= len(sentence) <= 100
+// * sentence contains only letters
+func WordsInSentence(sentence string) string {
 
-    result := make([]int, 0)
-    for i := 0;i < len(lst);i++ {
-        switch {
-        case i %3 == 0:
-            result = append(result, int(math.Pow(float64(lst[i]), 2)))
-        case i%3 != 0:
-            result = append(result, int(math.Pow(float64(lst[i]), 3)))
-        default:
-            result = append(result, lst[i])
+    new_lst := make([]string, 0)
+    for _, word := range strings.Fields(sentence) {
+        flg := 0
+        for i := 2;i < len(word);i++ {
+            if len(word)%i == 0 {
+                flg = 1
+            }
+        }
+        if flg == 0 || len(word) == 2 {
+            new_lst = append(new_lst, word)
         }
     }
-    sum := 0
-    for _, x := range result {
-        sum += x
-    }
-    return sum
+    return strings.Join(new_lst, " ")
 }
 
-func ExampleTestSumSquares(t *testing.T) {
+func ExampleTestWordsInSentence(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal(6, SumSquares([]int{1,2,3}))
-    assert.Equal(0, SumSquares([]int{}))
-    assert.Equal(-126, SumSquares([]int{-1,-5,2,-1,-5}))
+    assert.Equal("is", WordsInSentence("This is a test"))
+    assert.Equal("go for", WordsInSentence("lets go for swimming"))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestSumSquares(t)
+    ExampleTestWordsInSentence(t)
 }
