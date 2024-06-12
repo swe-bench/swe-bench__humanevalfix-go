@@ -4,45 +4,33 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
+import (
+	"sort"
+)
 
-// The Fib4 number sequence is a sequence similar to the Fibbonacci sequnece that's defined as follows:
-// Fib4(0) -> 0
-// Fib4(1) -> 0
-// Fib4(2) -> 2
-// Fib4(3) -> 0
-// Fib4(n) -> Fib4(n-1) + Fib4(n-2) + Fib4(n-3) + Fib4(n-4).
-// Please write a function to efficiently compute the n-th element of the Fib4 number sequence.  Do not use recursion.
-// >>> Fib4(5)
-// 4
-// >>> Fib4(6)
-// 8
-// >>> Fib4(7)
-// 14
-func Fib4(n int) int {
+// Return Median of elements in the list l.
+// >>> Median([3, 1, 2, 4, 5])
+// 3.0
+// >>> Median([-10, 4, 6, 1000, 10, 20])
+// 15.0
+func Median(l []int) float64 {
 
-    switch n {
-	case 0:
-		return 0
-	case 1:
-		return 0
-	case 2:
-		return 2
-	case 3:
-		return 0
-	default:
-		return Fib4(n-1) + Fib4(n-2) + Fib4(n-3) + Fib4(n-2)
+    sort.Ints(l)
+	if len(l)%2==1{
+		return float64(l[len(l)/2])
+	}else{
+		return float64(l[len(l)-1/2]+l[len(l)/2])/2.0
 	}
 }
 
-func ExampleTestFib4(t *testing.T) {
-    assert := assert.New(t)
-    assert.Equal(4, Fib4(5))
-    assert.Equal(8, Fib4(6))
-    assert.Equal(14, Fib4(7))
+func ExampleTestMedian(t *testing.T) {
+	assert := assert.New(t)
+	assert.Equal(3.0, Median([]int{3, 1, 2, 4, 5}))
+	assert.Equal(8.0, Median([]int{-10, 4, 6, 1000, 10, 20}))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestFib4(t)
+    ExampleTestMedian(t)
 }
