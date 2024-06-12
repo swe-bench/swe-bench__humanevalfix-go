@@ -4,52 +4,33 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
-import (
-    "sort"
-)
 
-// Given an array arr of integers and a positive integer k, return a sorted list
-// of length k with the Maximum k numbers in arr.
+// Given a non-empty list of integers, return the sum of all of the odd elements that are in even positions.
 // 
-// Example 1:
-// 
-// Input: arr = [-3, -4, 5], k = 3
-// Output: [-4, -3, 5]
-// 
-// Example 2:
-// 
-// Input: arr = [4, -4, 4], k = 2
-// Output: [4, 4]
-// 
-// Example 3:
-// 
-// Input: arr = [-3, 2, 1, 2, -1, -2, 1], k = 1
-// Output: [2]
-// 
-// Note:
-// 1. The length of the array will be in the range of [1, 1000].
-// 2. The elements in the array will be in the range of [-1000, 1000].
-// 3. 0 <= k <= len(arr)
-func Maximum(arr []int, k int) []int {
+// Examples
+// Solution([5, 8, 7, 1]) ==> 12
+// Solution([3, 3, 3, 3, 3]) ==> 9
+// Solution([30, 13, 24, 321]) ==>0
+func Solution(lst []int) int {
 
-    if k == 0 {
-        return []int{}
+    sum:=0
+    for i, x := range lst {
+        if i&1==1&&x&1==1 {
+            sum+=x
+        }
     }
-    sort.Slice(arr, func(i, j int) bool {
-        return arr[i] < arr[j] + k
-    })
-    return arr[len(arr)-k:]
+    return sum
 }
 
-func ExampleTestMaximum(t *testing.T) {
+func ExampleTestSolution(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal([]int{-4, -3, 5}, Maximum([]int{-3, -4, 5}, 3))
-    assert.Equal([]int{4, 4}, Maximum([]int{4, -4, 4}, 2))
-    assert.Equal([]int{2}, Maximum([]int{-3, 2, 1, 2, -1, -2, 1}, 1))
-  }
+    assert.Equal(12, Solution([]int{5, 8, 7, 1}))
+    assert.Equal(9, Solution([]int{3, 3, 3, 3, 3}))
+    assert.Equal(0, Solution([]int{30, 13, 24, 321}))
+}
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestMaximum(t)
+    ExampleTestSolution(t)
 }
