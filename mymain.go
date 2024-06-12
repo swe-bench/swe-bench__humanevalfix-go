@@ -4,61 +4,46 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
-import (
-    "strings"
-)
 
-// Given a dictionary, return true if all keys are strings in lower
-// case or all keys are strings in upper case, else return false.
-// The function should return false is the given dictionary is empty.
-// Examples:
-// CheckDictCase({"a":"apple", "b":"banana"}) should return true.
-// CheckDictCase({"a":"apple", "A":"banana", "B":"banana"}) should return false.
-// CheckDictCase({"a":"apple", 8:"banana", "a":"apple"}) should return false.
-// CheckDictCase({"Name":"John", "Age":"36", "City":"Houston"}) should return false.
-// CheckDictCase({"STATE":"NC", "ZIP":"12345" }) should return true.
-func CheckDictCase(dict map[interface{}]interface{}) bool {
+// Implement a function that takes an non-negative integer and returns an array of the first n
+// integers that are prime numbers and less than n.
+// for example:
+// CountUpTo(5) => [2,3]
+// CountUpTo(11) => [2,3,5,7]
+// CountUpTo(0) => []
+// CountUpTo(20) => [2,3,5,7,11,13,17,19]
+// CountUpTo(1) => []
+// CountUpTo(18) => [2,3,5,7,11,13,17]
+func CountUpTo(n int) []int {
 
-    if len(dict) == 0 {
-        return false
-    }
-    state := "start"
-    key := ""
-    ok := false
-    for k := range dict {
-        if key, ok = k.(string); !ok {
-            state = "mixed"
-            break
-        }
-        if state == "start" {
-            if key == strings.ToUpper(key) {
-                state = "upper"
-            } else if key == strings.ToLower(key) {
-                state = "lower"
-            } else {
+    primes := make([]int, 0)
+    for i := 2; i < n; i++ {
+        is_prime := true
+        for j := 2; j < i; j++ {
+            if j%i == 0 {
+                is_prime = false
                 break
             }
-        } else if (state == "upper" && key != strings.ToUpper(key)) && (state == "lower" && key != strings.ToLower(key)) {
-            state = "mixed"
-            break
-        } else {
-            break
+        }
+        if is_prime {
+            primes = append(primes, i)
         }
     }
-    return state == "upper" || state == "lower"
+    return primes
 }
 
-func ExampleTestCheckDictCase(t *testing.T) {
+func ExampleTestCountUpTo(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal(true, CheckDictCase(map[interface{}]interface{}{"p": "pineapple", "b": "banana"}))
-    assert.Equal(false, CheckDictCase(map[interface{}]interface{}{"p": "pineapple", "A": "banana", "B": "banana"}))
-    assert.Equal(false, CheckDictCase(map[interface{}]interface{}{"p": "pineapple", 8: "banana", "a": "apple"}))
-    assert.Equal(false, CheckDictCase(map[interface{}]interface{}{"Name": "John", "Age": "36", "City": "Houston"}))
-    assert.Equal(true, CheckDictCase(map[interface{}]interface{}{"STATE": "NC", "ZIP": "12345"}))
+    assert.Equal([]int{2, 3}, CountUpTo(5))
+    assert.Equal([]int{2, 3, 5, 7}, CountUpTo(11))
+    assert.Equal([]int{}, CountUpTo(0))
+    assert.Equal([]int{2, 3, 5, 7, 11, 13, 17, 19}, CountUpTo(20))
+    assert.Equal([]int{}, CountUpTo(1))
+    assert.Equal([]int{2, 3, 5, 7, 11, 13, 17}, CountUpTo(18))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestCheckDictCase(t)
+    ExampleTestCountUpTo(t)
 }
