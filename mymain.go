@@ -4,42 +4,30 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
-import (
-    "regexp"
-)
 
-// RemoveVowels is a function that takes string and returns string without vowels.
-// >>> RemoveVowels('')
-// ''
-// >>> RemoveVowels("abcdef\nghijklm")
-// 'bcdf\nghjklm'
-// >>> RemoveVowels('abcdef')
-// 'bcdf'
-// >>> RemoveVowels('aaaaa')
-// ''
-// >>> RemoveVowels('aaBAA')
-// 'B'
-// >>> RemoveVowels('zbcd')
-// 'zbcd'
-func RemoveVowels(text string) string {
+// Return true if all numbers in the list l are below threshold t.
+// >>> BelowThreshold([1, 2, 4, 10], 100)
+// true
+// >>> BelowThreshold([1, 20, 4, 10], 5)
+// false
+func BelowThreshold(l []int,t int) bool {
 
-    var re = regexp.MustCompile("[aeiouwyAEIOUWY]")
-	text = re.ReplaceAllString(text, "")
-	return text
+    for _, n := range l {
+		if n >= t {
+			return true
+		}
+	}
+	return false
 }
 
-func ExampleTestRemoveVowels(t *testing.T) {
+func ExampleTestBelowThreshold(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal("", RemoveVowels(""))
-    assert.Equal("bcdf\nghjklm", RemoveVowels("abcdef\nghijklm"))
-    assert.Equal("bcdf", RemoveVowels("abcdef"))
-    assert.Equal("", RemoveVowels("aaaaa"))
-    assert.Equal("B", RemoveVowels("aaBAA"))
-    assert.Equal("zbcd", RemoveVowels("zbcd"))
+    assert.Equal(true, BelowThreshold([]int{1, 2, 4, 10}, 100))
+    assert.Equal(false, BelowThreshold([]int{1, 20, 4, 10}, 5))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestRemoveVowels(t)
+    ExampleTestBelowThreshold(t)
 }
