@@ -5,43 +5,54 @@ import (
     "github.com/stretchr/testify/assert"
 )
 
-// You are given a positive integer n. You have to create an integer array a of length n.
-// For each i (1 ≤ i ≤ n), the value of a[i] = i * i - i + 1.
-// Return the number of triples (a[i], a[j], a[k]) of a where i < j < k,
-// and a[i] + a[j] + a[k] is a multiple of 3.
-// 
-// Example :
-// Input: n = 5
-// Output: 1
-// Explanation:
-// a = [1, 3, 7, 13, 21]
-// The only valid triple is (1, 7, 13).
-func GetMaxTriples(n int) int {
+// There are eight planets in our solar system: the closerst to the Sun
+// is Mercury, the next one is Venus, then Earth, Mars, Jupiter, Saturn,
+// Uranus, Neptune.
+// Write a function that takes two planet names as strings planet1 and planet2.
+// The function should return a tuple containing all planets whose orbits are
+// located between the orbit of planet1 and the orbit of planet2, sorted by
+// the proximity to the sun.
+// The function should return an empty tuple if planet1 or planet2
+// are not correct planet names.
+// Examples
+// Bf("Jupiter", "Neptune") ==> ("Saturn", "Uranus")
+// Bf("Earth", "Mercury") ==> ("Venus")
+// Bf("Mercury", "Uranus") ==> ("Venus", "Earth", "Mars", "Jupiter", "Saturn")
+func Bf(planet1, planet2 string) []string {
 
-    A := make([]int, 0)
-    for i := 1;i <= n;i++ {
-        A = append(A, i*i)
-    }
-    ans := 0
-    for i := 0;i < n;i++ {
-        for j := i + 1;j < n;j++ {
-            for k := j + 1;k < n;k++ {
-                if (A[i]+A[j]+A[k])%3 == 0 {
-                    ans++
-                }
-            }
+    planet_names := []string{"Mercury", "Venus", "Earth", "Mars", "Jupyter", "Saturn", "Uranus", "Neptune"}
+    pos1 := -1
+    pos2 := -1
+    for i, x := range planet_names {
+        if planet1 == x {
+            pos1 = i
+        }
+        if planet2 == x {
+            pos2 = i
         }
     }
-    return ans
+    if pos1 == -1 || pos2 == -1 || pos1 == pos2 {
+        return []string{}
+    }
+    if pos1 < pos2 {
+        return planet_names[pos1 + 1: pos2]
+    }
+    return planet_names[pos2 + 1 : pos1]
 }
 
-func ExampleTestGetMaxTriples(t *testing.T) {
+func ExampleTestBf(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal(1, GetMaxTriples(5))
-} 
+    assert.Equal([]string{"Saturn", "Uranus"}, Bf("Jupiter", "Neptune"))
+    assert.Equal([]string{"Venus"}, Bf("Earth", "Mercury"))
+    assert.Equal([]string{"Venus", "Earth", "Mars", "Jupiter", "Saturn"}, Bf("Mercury", "Uranus"))
+    assert.Equal([]string{"Earth", "Mars", "Jupiter", "Saturn", "Uranus"}, Bf("Neptune", "Venus"))
+    assert.Equal([]string{}, Bf("Earth", "Earth"))
+    assert.Equal([]string{}, Bf("Mars", "Earth"))
+    assert.Equal([]string{}, Bf("Jupiter", "Makemake"))
+}
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestGetMaxTriples(t)
+    ExampleTestBf(t)
 }
