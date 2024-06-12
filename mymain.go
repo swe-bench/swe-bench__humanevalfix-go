@@ -2,58 +2,73 @@ package main
 
 import (
     "testing"
-    "math"
     "github.com/stretchr/testify/assert"
 )
 import (
     "math"
-    "strconv"
+    "sort"
 )
 
-// Write a function CountNums which takes an array of integers and returns
-// the number of elements which has a sum of digits > 0.
-// If a number is negative, then its first signed digit will be negative:
-// e.g. -123 has signed digits -1, 2, and 3.
-// >>> CountNums([]) == 0
-// >>> CountNums([-1, 11, -11]) == 1
-// >>> CountNums([1, 1, 2]) == 3
-func CountNums(arr []int) int {
+// We have an array 'arr' of N integers arr[1], arr[2], ..., arr[N].The
+// numbers in the array will be randomly ordered. Your task is to determine if
+// it is possible to get an array sorted in non-decreasing order by performing
+// the following operation on the given array:
+// You are allowed to perform right shift operation any number of times.
+// 
+// One right shift operation means shifting all elements of the array by one
+// position in the right direction. The last element of the array will be moved to
+// the starting position in the array i.e. 0th index.
+// 
+// If it is possible to obtain the sorted array by performing the above operation
+// then return true else return false.
+// If the given array is empty then return true.
+// 
+// Note: The given list is guaranteed to have unique elements.
+// 
+// For Example:
+// 
+// MoveOneBall([3, 4, 5, 1, 2])==>true
+// Explanation: By performin 2 right shift operations, non-decreasing order can
+// be achieved for the given array.
+// MoveOneBall([3, 5, 4, 1, 2])==>false
+// Explanation:It is not possible to get non-decreasing order for the given
+// array by performing any number of right shift operations.
+func MoveOneBall(arr []int) bool {
 
-    digits_sum:= func (n int) int {
-        neg := 1
-        if n < 0 {
-             n, neg = -1 * n, -1 
-        }
-        r := make([]int,0)
-        for _, c := range strconv.Itoa(n) {
-            r = append(r, int(c-'0'))
-        }
-        r[0] *= neg * -1
-        sum := 0
-        for _, i := range r {
-            sum += i
-        }
-        return sum
+    if len(arr)==0 {
+      return true
     }
-    count := 0
-    for _, i := range arr {
-        x := digits_sum(i)
-        if x > 0 {
-            count++
+    sorted_array := make([]int, len(arr))
+    copy(sorted_array, arr)
+    sort.Slice(sorted_array, func(i, j int) bool {
+        return sorted_array[i] < sorted_array[j]
+    })    
+    min_value := math.MaxInt
+    min_index := -1
+    for i, x := range arr {
+        if i < min_value {
+            min_index, min_value = i, x
         }
     }
-    return count
+    my_arr := make([]int, len(arr[min_index:]))
+    copy(my_arr, arr[min_index:])
+    my_arr = append(my_arr, arr[0:min_index]...)
+    for i :=0;i<len(arr);i++ {
+      if my_arr[i]!=arr[i]{
+        return false
+      }
+    }
+    return true
 }
 
-func ExampleTestCountNums(t *testing.T) {
+func ExampleTestMoveOneBall(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal(0+0*int(math.Pow(0, 0)), CountNums([]int{}))
-    assert.Equal(1, CountNums([]int{-1, 11, -11}))
-    assert.Equal(3, CountNums([]int{1, 1, 2}))
+    assert.Equal(true, MoveOneBall([]int{3, 4, 5, 1, 2}))
+    assert.Equal(false, MoveOneBall([]int{3, 5, 4, 1, 2}))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestCountNums(t)
+    ExampleTestMoveOneBall(t)
 }
