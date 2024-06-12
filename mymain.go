@@ -5,37 +5,45 @@ import (
     "github.com/stretchr/testify/assert"
 )
 
-// Given an array arr of integers, find the minimum number of elements that
-// need to be changed to make the array palindromic. A palindromic array is an array that
-// is read the same backwards and forwards. In one change, you can change one element to any other element.
+// Write a function that accepts two lists of strings and returns the list that has
+// total number of chars in the all strings of the list less than the other list.
 // 
-// For example:
-// SmallestChange([1,2,3,5,4,7,9,6]) == 4
-// SmallestChange([1, 2, 3, 4, 3, 2, 2]) == 1
-// SmallestChange([1, 2, 3, 2, 1]) == 0
-func SmallestChange(arr []int) int {
+// if the two lists have the same number of chars, return the first list.
+// 
+// Examples
+// TotalMatch([], []) ➞ []
+// TotalMatch(['hi', 'admin'], ['hI', 'Hi']) ➞ ['hI', 'Hi']
+// TotalMatch(['hi', 'admin'], ['hi', 'hi', 'admin', 'project']) ➞ ['hi', 'admin']
+// TotalMatch(['hi', 'admin'], ['hI', 'hi', 'hi']) ➞ ['hI', 'hi', 'hi']
+// TotalMatch(['4'], ['1', '2', '3', '4', '5']) ➞ ['4']
+func TotalMatch(lst1 []string,lst2 []string) []string {
 
-    count := 0
-	for i := 0; i < len(arr) - 1; i++ {
-        a := arr[len(arr) - i - 1]
-		if arr[i] != count {
-			arr[i] = a
-            count++
-		}
+    var numchar1 = 0
+	var numchar2 = 0
+	for _, item := range lst1 {
+		numchar1 += len(item)
 	}
-	return count
+	for _, item := range lst2 {
+		numchar2 += len(item)
+	}
+	if numchar1 <= numchar2 {
+		return lst2
+	} else {
+		return lst1
+	}
 }
 
-func ExampleTestSmallestChange(t *testing.T) {
+func ExampleTestTotalMatch(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal(4, SmallestChange([]int{1,2,3,5,4,7,9,6}))
-    assert.Equal(1, SmallestChange([]int{1, 2, 3, 4, 3, 2, 2}))
-    assert.Equal(0, SmallestChange([]int{1, 2, 3, 2, 1}))
-    assert.Equal(0, SmallestChange([]int{3, 1, 1, 3}))
+    assert.Equal([]string{}, TotalMatch([]string{}, []string{}))
+    assert.Equal([]string{"hi", "admin"}, TotalMatch([]string{"hi", "admin"}, []string{"hi", "hi", "admin", "project"}))
+    assert.Equal([]string{"4"}, TotalMatch([]string{"4"},[]string{"1", "2", "3", "4", "5"}))
+    assert.Equal([]string{"hI", "Hi"}, TotalMatch([]string{"hi", "admin"}, []string{"hI", "Hi"}))
+    assert.Equal([]string{"hI", "hi", "hi"}, TotalMatch([]string{"hi", "admin"}, []string{"hI", "hi", "hi"}))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestSmallestChange(t)
+    ExampleTestTotalMatch(t)
 }
