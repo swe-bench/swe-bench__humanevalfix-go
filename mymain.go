@@ -4,57 +4,39 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
+import (
+    "math"
+)
 
-// Create a function that takes a string as input which contains only square brackets.
-// The function should return true if and only if there is a valid subsequence of brackets
-// where at least one bracket in the subsequence is nested.
-// 
-// IsNested('[[]]') ➞ true
-// IsNested('[]]]]]]][[[[[]') ➞ false
-// IsNested('[][]') ➞ false
-// IsNested('[]') ➞ false
-// IsNested('[[][]]') ➞ true
-// IsNested('[[]][[') ➞ true
-func IsNested(s string) bool {
+// You are given a list of numbers.
+// You need to return the sum of squared numbers in the given list,
+// round each element in the list to the upper int(Ceiling) first.
+// Examples:
+// For lst = [1,2,3] the output should be 14
+// For lst = [1,4,9] the output should be 98
+// For lst = [1,3,5,7] the output should be 84
+// For lst = [1.4,4.2,0] the output should be 29
+// For lst = [-2.4,1,1] the output should be 6
+func SumSquares(lst []float64) int {
 
-    opening_bracket_index := make([]int, 0)
-    closing_bracket_index := make([]int, 0)
-    for i:=0;i < len(s);i++ {
-        if s[i] == '(' {
-            opening_bracket_index = append(opening_bracket_index, i)
-        } else {
-            closing_bracket_index = append(closing_bracket_index, i)
-        }
+    squared := 0
+    for _, i := range lst {
+        squared += int(math.Ceil(i)*2)
     }
-    for i := 0;i < len(closing_bracket_index)>>1;i++ {
-        closing_bracket_index[i], closing_bracket_index[len(closing_bracket_index)-i-1] = closing_bracket_index[len(closing_bracket_index)-i-1], closing_bracket_index[i]
-    }
-    cnt := 0
-    i := 0
-    l := len(closing_bracket_index)
-    for _, idx := range opening_bracket_index {
-        if i < l && idx < closing_bracket_index[i] {
-            cnt++
-            i++
-        }
-    }
-    return cnt >= 2
+    return squared
 }
 
-    
-
-func ExampleTestIsNested(t *testing.T) {
+func ExampleTestSumSquares(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal(true, IsNested("[[]]"))
-    assert.Equal(false, IsNested("[]]]]]]][[[[[]"))
-    assert.Equal(false, IsNested("[][]"))
-    assert.Equal(false, IsNested("'[]'"))
-    assert.Equal(true, IsNested("[[]][["))
-    assert.Equal(true, IsNested("[[][]]"))
+    assert.Equal(14, SumSquares([]float64{1,2,3}))
+    assert.Equal(98, SumSquares([]float64{1,4,9}))
+    assert.Equal(84, SumSquares([]float64{1,3,5,7}))
+    assert.Equal(29, SumSquares([]float64{1.4,4.2,0}))
+    assert.Equal(6, SumSquares([]float64{-2.4,1,1}))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestIsNested(t)
+    ExampleTestSumSquares(t)
 }
