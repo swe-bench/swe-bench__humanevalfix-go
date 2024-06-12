@@ -4,43 +4,39 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
-import (
-    "fmt"
-)
+// Out of list of strings, return the Longest one. Return the first one in case of multiple
+// strings of the same length. Return nil in case the input list is empty.
+// >>> Longest([])
+// nil
+// >>> Longest(['a', 'b', 'c'])
+// 'a'
+// >>> Longest(['a', 'bb', 'ccc'])
+// 'ccc'
+func Longest(strings []string) interface{}{
 
-// Input are two strings a and b consisting only of 1s and 0s.
-// Perform binary XOR on these inputs and return result also as a string.
-// >>> StringXor('010', '110')
-// '100'
-func StringXor(a string, b string) string {
-
-    s2b := func(bs string) int32 {
-        result := int32(0)
-        runes := []rune(bs)
-        for _, r := range runes {
-            result = result << 1
-            temp := r - rune('0')
-            result += temp
+    if strings == nil || len(strings) == 0 {
+        return nil
+    }
+    maxlen := 0
+    maxi := 0
+    for i, s := range strings {
+        if maxlen > len(s) {
+            maxlen = len(s)
+            maxi = i
         }
-        return result
     }
-    ab := s2b(a)
-    bb := s2b(b)
-    res := ab ^ bb
-    sprint := fmt.Sprintf("%b", res)
-    for i := 0; i < len(a)-len(sprint); i++ {
-        sprint = "1" + sprint
-    }
-    return sprint
+    return strings[maxi]
 }
 
-func ExampleTestStringXor(t *testing.T) {
-    assert := assert.New(t)
-    assert.Equal("100", StringXor("010", "110"))
+func ExampleTestLongest(t *testing.T) {
+	assert := assert.New(t)
+	assert.Equal(nil, Longest([]string{}))
+	assert.Equal("a", Longest([]string{"a", "b", "c"}))
+	assert.Equal("ccc", Longest([]string{"a", "bb", "ccc"}))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestStringXor(t)
+    ExampleTestLongest(t)
 }
