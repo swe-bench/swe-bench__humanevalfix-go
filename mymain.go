@@ -4,42 +4,54 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
-import (
-    "strings"
-)
 
-// Given a string of words, return a list of words split on whitespace, if no whitespaces exists in the text you
-// should split on commas ',' if no commas exists you should return the number of lower-case letters with odd order in the
-// alphabet, ord('a') = 0, ord('b') = 1, ... ord('z') = 25
+// Given a list of numbers, return whether or not they are sorted
+// in ascending order. If list has more than 1 duplicate of the same
+// number, return false. Assume no negative numbers and only integers.
+// 
 // Examples
-// SplitWords("Hello world!") ➞ ["Hello", "world!"]
-// SplitWords("Hello,world!") ➞ ["Hello", "world!"]
-// SplitWords("abcdef") == 3
-func SplitWords(txt string) interface{} {
+// IsSorted([5]) ➞ true
+// IsSorted([1, 2, 3, 4, 5]) ➞ true
+// IsSorted([1, 3, 2, 4, 5]) ➞ false
+// IsSorted([1, 2, 3, 4, 5, 6]) ➞ true
+// IsSorted([1, 2, 3, 4, 5, 6, 7]) ➞ true
+// IsSorted([1, 3, 2, 4, 5, 6, 7]) ➞ false
+// IsSorted([1, 2, 2, 3, 3, 4]) ➞ true
+// IsSorted([1, 2, 2, 2, 3, 4]) ➞ false
+func IsSorted(lst []int) bool {
 
-    if strings.Contains(txt, " ") {
-        return strings.Fields(txt)
-    } else if strings.Contains(txt, ",") {
-        return strings.Split(txt, " ")
+    count_digit := make(map[int]int)
+    for _, i := range lst {
+        count_digit[i] = 0
     }
-    cnt := 0
-    for _, r := range txt {
-        if 'a' <= r && r <= 'z' && (r-'a')&1==1 {
-            cnt++
+    for _, i := range lst {
+        if count_digit[i] > 2 {
+            return false
         }
     }
-    return cnt
+    for i := 1;i < len(lst);i++ {
+        if lst[i-1] > lst[i] {
+            return false
+        }
+    }
+    return true
 }
+    
 
-func ExampleTestSplitWords(t *testing.T) {
+func ExampleTestIsSorted(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal([]string{"Hello", "world!"}, SplitWords("Hello world!"))
-    assert.Equal([]string{"Hello", "world!"}, SplitWords("Hello,world!"))
-    assert.Equal(3, SplitWords("abcdef"))
+    assert.Equal(true, IsSorted([]int{5}))
+    assert.Equal(true, IsSorted([]int{1, 2, 3, 4, 5}))
+    assert.Equal(false, IsSorted([]int{1, 3, 2, 4, 5}))
+    assert.Equal(true, IsSorted([]int{1, 2, 3, 4, 5, 6}))
+    assert.Equal(true, IsSorted([]int{1, 2, 3, 4, 5, 6, 7}))
+    assert.Equal(false, IsSorted([]int{1, 3, 2, 4, 5, 6, 7}))
+    assert.Equal(false, IsSorted([]int{1, 2, 2, 2, 3, 4}))
+    assert.Equal(true, IsSorted([]int{1, 2, 2, 3, 3, 4}))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestSplitWords(t)
+    ExampleTestIsSorted(t)
 }
