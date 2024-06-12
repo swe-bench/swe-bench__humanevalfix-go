@@ -4,43 +4,41 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
+import (
+    "sort"
+)
 
-// You are given a non-empty list of positive integers. Return the greatest integer that is greater than
-// zero, and has a frequency greater than or equal to the value of the integer itself.
-// The frequency of an integer is the number of times it appears in the list.
-// If no such a value exist, return -1.
+// Given list of integers, return list in strange order.
+// Strange sorting, is when you start with the minimum value,
+// then maximum of the remaining integers, then minimum and so on.
+// 
 // Examples:
-// Search([4, 1, 2, 2, 3, 1]) == 2
-// Search([1, 2, 2, 3, 3, 3, 4, 4, 4]) == 3
-// Search([5, 5, 4, 4, 4]) == -1
-func Search(lst []int) int {
+// StrangeSortList([1, 2, 3, 4]) == [1, 4, 2, 3]
+// StrangeSortList([5, 5, 5, 5]) == [5, 5, 5, 5]
+// StrangeSortList([]) == []
+func StrangeSortList(lst []int) []int {
 
-    countMap := make(map[int]int)
-	for _, i := range lst {
-		if count, ok := countMap[i]; ok {
-			countMap[i] = count + 1
-		} else {
-			countMap[i] = 1
-		}
+    sort.Ints(lst)
+	result := make([]int, 0)
+	for i := 0; i < len(lst)/2; i++ {
+		result = append(result, lst[i])
+		result = append(result, lst[len(lst)-i-1])
 	}
-	max := 0
-	for i, count := range countMap {
-		if count >= i && count > max {
-			max = i
-		}
+	if len(lst)%2 == 0 {
+		result = append(result, lst[len(lst)/2])
 	}
-	return max
+	return result
 }
 
-func ExampleTestSearch(t *testing.T) {
+func ExampleTestStrangeSortList(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal(2, Search([]int{4, 1, 2, 2, 3, 1}))
-    assert.Equal(3, Search([]int{1, 2, 2, 3, 3, 3, 4, 4, 4}))
-    assert.Equal(-1, Search([]int{5, 5, 4, 4, 4}))
+    assert.Equal([]int{1, 4, 2, 3}, StrangeSortList([]int{1,2, 3, 4}))
+    assert.Equal([]int{5, 5, 5, 5}, StrangeSortList([]int{5,5, 5, 5}))
+    assert.Equal([]int{}, StrangeSortList([]int{}))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestSearch(t)
+    ExampleTestStrangeSortList(t)
 }
