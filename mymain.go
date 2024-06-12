@@ -4,39 +4,39 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
-import (
-    "strings"
-)
 
-// Given a string, find out how many distinct characters (regardless of case) does it consist of
-// >>> CountDistinctCharacters('xyzXYZ')
-// 3
-// >>> CountDistinctCharacters('Jerry')
-// 4
-func CountDistinctCharacters(str string) int{
+// Input to this function is a string representing musical notes in a special ASCII format.
+// Your task is to parse this string and return list of integers corresponding to how many beats does each
+// not last.
+// 
+// Here is a legend:
+// 'o' - whole note, lasts four beats
+// 'o|' - half note, lasts two beats
+// '.|' - quater note, lasts one beat
+// 
+// >>> ParseMusic('o o| .| o| o| .| .| .| .| o o')
+// [4, 2, 1, 2, 2, 1, 1, 1, 1, 4, 4]
+func ParseMusic(music_string string) []int{
 
-    count := 0
-	set := make(map[rune]bool)
-	for _, i := range str {
-		if set[i] == true {
-			continue
-		} else {
-			set[i] = true
-			count++
+    note_map := map[string]int{"o": 3, "o|": 2, ".|": 1}
+	split := strings.Split(music_string, " ")
+	result := make([]int, 0)
+	for _, x := range split {
+		if i, ok := note_map[x]; ok {
+			result = append(result, i)
 		}
 	}
-	return count
+	return result
 }
 
 
-func ExampleTestCountDistinctCharacters(t *testing.T) {
+func ExampleTestParseMusic(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal(3, CountDistinctCharacters("xyzXYZ"))
-    assert.Equal(4, CountDistinctCharacters("Jerry"))
+    assert.Equal([]int{4, 2, 1, 2, 2, 1, 1, 1, 1, 4, 4}, ParseMusic("o o| .| o| o| .| .| .| .| o o"))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestCountDistinctCharacters(t)
+    ExampleTestParseMusic(t)
 }
