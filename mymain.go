@@ -1,27 +1,32 @@
 package main
 
 import (
-    "fmt"
-    "strconv"
+    "testing"
+    "github.com/stretchr/testify/assert"
 )
 
-// Given a positive integer N, return the total sum of its digits in binary.
+// Given a non-empty list of integers lst. Add the even elements that are at odd indices..
 // 
-// Example
-// For N = 1000, the sum of digits will be 1 the output should be "1".
-// For N = 150, the sum of digits will be 6 the output should be "110".
-// For N = 147, the sum of digits will be 12 the output should be "1100".
-// 
-// Variables:
-// @N integer
-// Constraints: 0 ≤ N ≤ 10000.
-// Output:
-// a string of binary number
-func Solve(N int) string {
+// Examples:
+// Add([4, 2, 6, 7]) ==> 2
+func Add(lst []int) int {
 
     sum := 0
-    for _, c := range strconv.Itoa(N) {
-        sum = int(c - '0')
+    for i := 1; i < len(lst); i += 1 {
+        if lst[i]%2 == 0 {
+            sum += lst[i]
+        }
     }
-    return fmt.Sprintf("%b", sum)
+    return sum
+}
+
+func ExampleTestAdd(t *testing.T) {
+    assert := assert.New(t)
+    assert.Equal(2, Add([]int{4, 2, 6, 7}))
+}
+
+func main() {
+    // Here you can call the test functions or any other code
+    t := &testing.T{}
+    ExampleTestAdd(t)
 }
