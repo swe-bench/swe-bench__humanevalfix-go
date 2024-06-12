@@ -4,43 +4,38 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
+import (
+    "math"
+)
 
-// Your task is to write a function that returns true if a number x is a simple
-// power of n and false in other cases.
-// x is a simple power of n if n**int=x
-// For example:
-// IsSimplePower(1, 4) => true
-// IsSimplePower(2, 2) => true
-// IsSimplePower(8, 2) => true
-// IsSimplePower(3, 2) => false
-// IsSimplePower(3, 1) => false
-// IsSimplePower(5, 3) => false
-func IsSimplePower(x int,n int) bool {
+// Write a function that takes an integer a and returns true
+// if this ingeger is a cube of some integer number.
+// Note: you may assume the input is always valid.
+// Examples:
+// Iscube(1) ==> true
+// Iscube(2) ==> false
+// Iscube(-1) ==> true
+// Iscube(64) ==> true
+// Iscube(0) ==> true
+// Iscube(180) ==> false
+func Iscube(a int) bool {
 
-    if x == 1 {
-		return true
-	}
-	if n==1 {
-		return false
-	}
-	if x % n != 0 {
-		return false
-	}
-	return IsSimplePower(x, n)
+    abs := math.Abs(float64(a))
+	return int(math.Round(math.Pow(abs, 1.0/3.0))) == int(abs)
 }
 
-func ExampleTestIsSimplePower(t *testing.T) {
+func ExampleTestIscube(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal(true, IsSimplePower(1, 4))
-    assert.Equal(true, IsSimplePower(2, 2))
-    assert.Equal(true, IsSimplePower(8, 2))
-    assert.Equal(false, IsSimplePower(3, 2))
-    assert.Equal(false, IsSimplePower(3, 1))
-    assert.Equal(false, IsSimplePower(5, 3))
+    assert.Equal(true, Iscube(1))
+    assert.Equal(false, Iscube(2))
+    assert.Equal(true, Iscube(-1))
+    assert.Equal(true, Iscube(64))
+    assert.Equal(false, Iscube(180))
+    assert.Equal(true, Iscube(0))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestIsSimplePower(t)
+    ExampleTestIscube(t)
 }
