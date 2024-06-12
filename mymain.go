@@ -4,36 +4,42 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
+import (
+    "fmt"
+    "math"
+)
 
-// This function takes two positive numbers x and y and returns the
-// biggest even integer number that is in the range [x, y] inclusive. If
-// there's no such number, then the function should return -1.
-// 
-// For example:
-// ChooseNum(12, 15) = 14
-// ChooseNum(13, 12) = -1
-func ChooseNum(x, y int) int {
+// You are given two positive integers n and m, and your task is to compute the
+// average of the integers from n through m (including n and m).
+// Round the answer to the nearest integer and convert that to binary.
+// If n is greater than m, return -1.
+// Example:
+// RoundedAvg(1, 5) => "0b11"
+// RoundedAvg(7, 5) => -1
+// RoundedAvg(10, 20) => "0b1111"
+// RoundedAvg(20, 33) => "0b11010"
+func RoundedAvg(n, m int) interface{} {
 
-    if x > y {
+    if m < n {
         return -1
     }
-    if y % 2 == 0 {
-        return y
+    summation := 0
+    for i := n;i < m+1;i++{
+        summation += i
     }
-    if x == y {
-        return -1
-    }
-    return x - 1
+    return fmt.Sprintf("0b%b", int(math.Round(float64(summation)/float64(m - n))))
 }
 
-func ExampleTestChooseNum(t *testing.T) {
+func ExampleTestRoundedAvg(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal(14, ChooseNum(12,15))
-    assert.Equal(-1, ChooseNum(13,12))
+    assert.Equal("0b11", RoundedAvg(1, 5))
+    assert.Equal(-1, RoundedAvg(7, 5))
+    assert.Equal("0b1111", RoundedAvg(10, 20))
+    assert.Equal("0b11011", RoundedAvg(20, 33))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestChooseNum(t)
+    ExampleTestRoundedAvg(t)
 }
