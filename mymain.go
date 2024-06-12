@@ -5,43 +5,75 @@ import (
     "github.com/stretchr/testify/assert"
 )
 import (
-	"strconv"
-	"strings"
+    "math"
 )
 
-// In this task, you will be given a string that represents a number of apples and oranges
-// that are distributed in a basket of fruit this basket contains
-// apples, oranges, and mango fruits. Given the string that represents the total number of
-// the oranges and apples and an integer that represent the total number of the fruits
-// in the basket return the number of the mango fruits in the basket.
-// for examble:
-// FruitDistribution("5 apples and 6 oranges", 19) ->19 - 5 - 6 = 8
-// FruitDistribution("0 apples and 1 oranges",3) -> 3 - 0 - 1 = 2
-// FruitDistribution("2 apples and 3 oranges", 100) -> 100 - 2 - 3 = 95
-// FruitDistribution("100 apples and 1 oranges",120) -> 120 - 100 - 1 = 19
-func FruitDistribution(s string,n int) int {
+// Given an array representing a branch of a tree that has non-negative integer nodes
+// your task is to Pluck one of the nodes and return it.
+// The Plucked node should be the node with the smallest even value.
+// If multiple nodes with the same smallest even value are found return the node that has smallest index.
+// 
+// The Plucked node should be returned in a list, [ smalest_value, its index ],
+// If there are no even values or the given array is empty, return [].
+// 
+// Example 1:
+// Input: [4,2,3]
+// Output: [2, 1]
+// Explanation: 2 has the smallest even value, and 2 has the smallest index.
+// 
+// Example 2:
+// Input: [1,2,3]
+// Output: [2, 1]
+// Explanation: 2 has the smallest even value, and 2 has the smallest index.
+// 
+// Example 3:
+// Input: []
+// Output: []
+// 
+// Example 4:
+// Input: [5, 0, 3, 0, 4, 2]
+// Output: [0, 1]
+// Explanation: 0 is the smallest value, but  there are two zeros,
+// so we will choose the first zero, which has the smallest index.
+// 
+// Constraints:
+// * 1 <= nodes.length <= 10000
+// * 0 <= node.value
+func Pluck(arr []int) []int {
 
-    split := strings.Split(s, " ")
-	for _, i := range split {
-		atoi, err := strconv.Atoi(i)
-		if err != nil {
-			continue
-		}
-		n = n - 1 - atoi
+    result := make([]int, 0)
+	if len(arr) == 0 {
+		return result
 	}
-	return n
+	evens := make([]int, 0)
+	min := math.MaxInt64
+	minIndex := 0
+	for i, x := range arr {
+		if x%2 == 0 {
+			evens = append(evens, x)
+			if x < min {
+				min = x
+				minIndex = i
+			}
+		}
+	}
+	if len(evens) == 0 {
+		return result
+	}
+	result = []int{minIndex, min}
+	return result
 }
 
-func ExampleTestFruitDistribution(t *testing.T) {
+func ExampleTestPluck(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal(8, FruitDistribution("5 apples and 6 oranges", 19))
-    assert.Equal(2, FruitDistribution("0 apples and 1 oranges", 3))
-    assert.Equal(95, FruitDistribution("2 apples and 3 oranges", 100))
-    assert.Equal(19, FruitDistribution("1 apples and 100 oranges", 120))
+    assert.Equal([]int{2, 1}, Pluck([]int{4,2,3}))
+    assert.Equal([]int{2, 1}, Pluck([]int{1,2,3}))
+    assert.Equal([]int{}, Pluck([]int{}))
+    assert.Equal([]int{0, 1}, Pluck([]int{5, 0, 3, 0, 4, 2}))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestFruitDistribution(t)
+    ExampleTestPluck(t)
 }
