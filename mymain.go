@@ -4,33 +4,39 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
+import (
+    "strconv"
+)
 
-// Given a non-empty list of integers, return the sum of all of the odd elements that are in even positions.
+// Given a non-empty array of integers arr and an integer k, return
+// the sum of the elements with at most two digits from the first k elements of arr.
 // 
-// Examples
-// Solution([5, 8, 7, 1]) ==> 12
-// Solution([3, 3, 3, 3, 3]) ==> 9
-// Solution([30, 13, 24, 321]) ==>0
-func Solution(lst []int) int {
+// Example:
+// 
+// Input: arr = [111,21,3,4000,5,6,7,8,9], k = 4
+// Output: 24 # sum of 21 + 3
+// 
+// Constraints:
+// 1. 1 <= len(arr) <= 100
+// 2. 1 <= k <= len(arr)
+func AddElements(arr []int, k int) int {
 
-    sum:=0
-    for i, x := range lst {
-        if i&1==1&&x&1==1 {
-            sum+=x
+    sum := 0
+    for _, elem := range arr {
+        if len(strconv.Itoa(elem)) <= 2 {
+            sum += elem
         }
     }
     return sum
 }
 
-func ExampleTestSolution(t *testing.T) {
+func ExampleTestAddElements(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal(12, Solution([]int{5, 8, 7, 1}))
-    assert.Equal(9, Solution([]int{3, 3, 3, 3, 3}))
-    assert.Equal(0, Solution([]int{30, 13, 24, 321}))
+    assert.Equal(24, AddElements([]int{111,21,3,4000,5,6,7,8,9}, 4))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestSolution(t)
+    ExampleTestAddElements(t)
 }
