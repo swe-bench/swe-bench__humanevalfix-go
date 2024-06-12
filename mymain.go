@@ -1,51 +1,31 @@
 package main
 
 import (
-    "testing"
-    "github.com/stretchr/testify/assert"
-)
-import (
-	"sort"
+    "math"
+    "strings"
+    "time"
 )
 
-// This function takes a list l and returns a list l' such that
-// l' is identical to l in the odd indicies, while its values at the even indicies are equal
-// to the values of the even indicies of l, but sorted.
-// >>> SortEven([1, 2, 3])
-// [1, 2, 3]
-// >>> SortEven([5, 6, 3, 4])
-// [3, 6, 5, 4]
-func SortEven(l []int) []int {
-
-    evens := make([]int, 0)
-	for i := 0; i < len(l); i += 2 {
-		evens = append(evens, l[i])
-	}
-	sort.Ints(l)
-	j := 0
-	for i := 0; i < len(l); i += 2 {
-		l[i] = evens[j]
-		j++
-	}
-	return l
+// returns encoded string by cycling groups of three characters.
+func EncodeCyclic(s string) string {
+    groups := make([]string, 0)
+    for i := 0; i < ((len(s) + 2) / 3); i++ {
+        groups = append(groups, s[3*i:int(math.Min(float64(3*i+3), float64(len(s))))])
+    }
+    newGroups := make([]string, 0)
+    for _, group := range groups {
+        runes := []rune(group)
+        if len(group) == 3 {
+            newGroups = append(newGroups, string(append(runes[1:], runes[0])))
+        } else {
+            newGroups = append(newGroups, group)
+        }
+    }
+    return strings.Join(newGroups, "")
 }
 
-func ExampleTestSortEven(t *testing.T) {
-	assert := assert.New(t)
-	same := func(src []int, target []int) bool {
-		for i := 0; i < len(src); i++ {
-			if src[i] != target[i] {
-				return false
-			}
-		}
-		return true
-	}
-	assert.Equal(true, same([]int{1, 2, 3}, SortEven([]int{1, 2, 3})))
-	assert.Equal(true, same([]int{3,6,5,4}, SortEven([]int{5,6,3,4})))
-}
+// takes as input string encoded with EncodeCyclic function. Returns decoded string.
+func DecodeCyclic(s string) string {
 
-func main() {
-    // Here you can call the test functions or any other code
-    t := &testing.T{}
-    ExampleTestSortEven(t)
+    return EncodeCyclic(s)
 }
