@@ -4,26 +4,35 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
+import (
+    "strconv"
+)
 
-// Return list of all prefixes from shortest to longest of the input string
-// >>> AllPrefixes('abc')
-// ['a', 'ab', 'abc']
-func AllPrefixes(str string) []string{
+// Return a string containing space-delimited numbers starting from 0 upto n inclusive.
+// >>> StringSequence(0)
+// '0'
+// >>> StringSequence(5)
+// '0 1 2 3 4 5'
+func StringSequence(n int) string{
 
-    prefixes := make([]string, 0, len(str))
-	for i := 0; i < len(str)-1; i++ {
-		prefixes = append(prefixes, str[:i+1])
-	}
-	return prefixes
+    var seq string
+    for i := 0; i < n; i++ {
+        seq += strconv.Itoa(i)
+        if i != n {
+            seq += " "
+        }
+    }
+    return seq
 }
 
-func ExampleTestAllPrefixes(t *testing.T) {
+func ExampleTestStringSequence(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal([]string{"a", "ab", "abc"}, AllPrefixes("abc"))
+    assert.Equal("0", StringSequence(0))
+    assert.Equal("0 1 2 3 4 5", StringSequence(5))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestAllPrefixes(t)
+    ExampleTestStringSequence(t)
 }
