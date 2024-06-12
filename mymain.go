@@ -5,57 +5,60 @@ import (
     "github.com/stretchr/testify/assert"
 )
 import (
-    "math"
-    "strconv"
+    "strings"
 )
 
-// You are given a list of integers.
-// You need to find the largest prime value and return the sum of its digits.
-// 
+// Given a dictionary, return true if all keys are strings in lower
+// case or all keys are strings in upper case, else return false.
+// The function should return false is the given dictionary is empty.
 // Examples:
-// For lst = [0,3,2,1,3,5,7,4,5,5,5,2,181,32,4,32,3,2,32,324,4,3] the output should be 10
-// For lst = [1,0,1,8,2,4597,2,1,3,40,1,2,1,2,4,2,5,1] the output should be 25
-// For lst = [1,3,1,32,5107,34,83278,109,163,23,2323,32,30,1,9,3] the output should be 13
-// For lst = [0,724,32,71,99,32,6,0,5,91,83,0,5,6] the output should be 11
-// For lst = [0,81,12,3,1,21] the output should be 3
-// For lst = [0,8,1,2,1,7] the output should be 7
-func Skjkasdkd(lst []int) int {
+// CheckDictCase({"a":"apple", "b":"banana"}) should return true.
+// CheckDictCase({"a":"apple", "A":"banana", "B":"banana"}) should return false.
+// CheckDictCase({"a":"apple", 8:"banana", "a":"apple"}) should return false.
+// CheckDictCase({"Name":"John", "Age":"36", "City":"Houston"}) should return false.
+// CheckDictCase({"STATE":"NC", "ZIP":"12345" }) should return true.
+func CheckDictCase(dict map[interface{}]interface{}) bool {
 
-    isPrime := func(n int) bool {
-        for i := 2; i < int(math.Pow(float64(n), 0.5)+1); i++ {
-            if n%i == 0 {
-                return true
-            }
-        }
+    if len(dict) == 0 {
         return false
     }
-    maxx := 0
-    i := 0
-    for i < len(lst) {
-        if lst[i] > maxx && isPrime(lst[i]) {
-            maxx = lst[i]
+    state := "start"
+    key := ""
+    ok := false
+    for k := range dict {
+        if key, ok = k.(string); !ok {
+            state = "mixed"
+            break
         }
-        i++
+        if state == "start" {
+            if key == strings.ToUpper(key) {
+                state = "upper"
+            } else if key == strings.ToLower(key) {
+                state = "lower"
+            } else {
+                break
+            }
+        } else if (state == "upper" && key != strings.ToUpper(key)) && (state == "lower" && key != strings.ToLower(key)) {
+            state = "mixed"
+            break
+        } else {
+            break
+        }
     }
-    sum := 0
-    for _, d := range strconv.Itoa(maxx) {
-        sum += int(d - '0')
-    }
-    return sum
+    return state == "upper" || state == "lower"
 }
 
-func ExampleTestSkjkasdkd(t *testing.T) {
+func ExampleTestCheckDictCase(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal(10, Skjkasdkd([]int{0, 3, 2, 1, 3, 5, 7, 4, 5, 5, 5, 2, 181, 32, 4, 32, 3, 2, 32, 324, 4, 3}))
-    assert.Equal(25, Skjkasdkd([]int{1, 0, 1, 8, 2, 4597, 2, 1, 3, 40, 1, 2, 1, 2, 4, 2, 5, 1}))
-    assert.Equal(13, Skjkasdkd([]int{1, 3, 1, 32, 5107, 34, 83278, 109, 163, 23, 2323, 32, 30, 1, 9, 3}))
-    assert.Equal(11, Skjkasdkd([]int{0, 724, 32, 71, 99, 32, 6, 0, 5, 91, 83, 0, 5, 6}))
-    assert.Equal(3, Skjkasdkd([]int{0, 81, 12, 3, 1, 21}))
-    assert.Equal(7, Skjkasdkd([]int{0, 8, 1, 2, 1, 7}))
+    assert.Equal(true, CheckDictCase(map[interface{}]interface{}{"p": "pineapple", "b": "banana"}))
+    assert.Equal(false, CheckDictCase(map[interface{}]interface{}{"p": "pineapple", "A": "banana", "B": "banana"}))
+    assert.Equal(false, CheckDictCase(map[interface{}]interface{}{"p": "pineapple", 8: "banana", "a": "apple"}))
+    assert.Equal(false, CheckDictCase(map[interface{}]interface{}{"Name": "John", "Age": "36", "City": "Houston"}))
+    assert.Equal(true, CheckDictCase(map[interface{}]interface{}{"STATE": "NC", "ZIP": "12345"}))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestSkjkasdkd(t)
+    ExampleTestCheckDictCase(t)
 }
