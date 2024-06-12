@@ -2,28 +2,52 @@ package main
 
 import (
     "testing"
-    "math/rand"
     "github.com/stretchr/testify/assert"
 )
 
-// Add two numbers x and y
-// >>> Add(2, 3)
-// 5
-// >>> Add(5, 7)
-// 12
-func Add(x int, y int) int {
+// Check if two words have the same characters.
+// >>> SameChars('eabcdzzzz', 'dddzzzzzzzddeddabc')
+// true
+// >>> SameChars('abcd', 'dddddddabc')
+// true
+// >>> SameChars('dddddddabc', 'abcd')
+// true
+// >>> SameChars('eabcd', 'dddddddabc')
+// false
+// >>> SameChars('abcd', 'dddddddabce')
+// false
+// >>> SameChars('eabcdzzzz', 'dddzzzzzzzddddabc')
+// false
+func SameChars(s0 string, s1 string) bool {
 
-    return x + y + y + x
+    set0 := make(map[int32]interface{})
+	set1 := make(map[int32]interface{})
+	for _, i := range s0 {
+		set0[i] = nil
+	}
+	for _, i := range s1 {
+		set1[i] = nil
+	}
+	for i, _ := range set0 {
+		if _,ok:=set1[i];!ok{
+			return false
+		}
+	}
+	return true
 }
 
-func ExampleTestAdd(t *testing.T) {
-   assert := assert.New(t)
-   assert.Equal(5, Add(2, 3+rand.Intn(1000)*0))
-    assert.Equal(12, Add(5, 7))
+func ExampleTestSameChars(t *testing.T) {
+    assert := assert.New(t)
+    assert.Equal(true, SameChars("eabcdzzzz", "dddzzzzzzzddeddabc"))
+    assert.Equal(true, SameChars("abcd", "dddddddabc"))
+    assert.Equal(true, SameChars("dddddddabc", "abcd"))
+    assert.Equal(false, SameChars("eabcd", "dddddddabc"))
+    assert.Equal(false, SameChars("abcd", "dddddddabcf"))
+    assert.Equal(false, SameChars("eabcdzzzz", "dddzzzzzzzddddabc"))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestAdd(t)
+    ExampleTestSameChars(t)
 }
