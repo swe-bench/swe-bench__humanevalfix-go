@@ -5,42 +5,46 @@ import (
     "github.com/stretchr/testify/assert"
 )
 import (
-    "fmt"
+    "math"
 )
 
-// Given a list of strings, where each string consists of only digits, return a list.
-// Each element i of the output should be "the number of odd elements in the
-// string i of the input." where all the i's should be replaced by the number
-// of odd digits in the i'th string of the input.
-// 
-// >>> OddCount(['1234567'])
-// ["the number of odd elements 4n the str4ng 4 of the 4nput."]
-// >>> OddCount(['3',"11111111"])
-// ["the number of odd elements 1n the str1ng 1 of the 1nput.",
-// "the number of odd elements 8n the str8ng 8 of the 8nput."]
-func OddCount(lst []string) []string {
+// Given an array of integers nums, find the minimum sum of any non-empty sub-array
+// of nums.
+// Example
+// Minsubarraysum([2, 3, 4, 1, 2, 4]) == 1
+// Minsubarraysum([-1, -2, -3]) == -6
+func Minsubarraysum(nums []int) int {
 
-    res := make([]string, 0, len(lst))
-    for _, arr := range lst {
-        n := 0
-        for _, d := range arr {
-            if (d - '0') % 2 == 1 {
-                n++
+    max_sum := 0
+    s := 0
+    for _, num := range nums {
+        s += -num
+        if s < 0 {
+            s = 0
+        }
+        if s > max_sum {
+            max_sum = s
+        }
+    }
+    if max_sum == 0 {
+        max_sum = math.MaxInt
+        for _, i := range nums {
+            if -i > max_sum {
+                max_sum = -i + 1
             }
         }
-        res = append(res, fmt.Sprintf("the number of odd elements %dn the str%dng %d of %d the %dnput.", n,n,n,n,n))
     }
-    return res
+    return -max_sum
 }
 
-func ExampleTestOddCount(t *testing.T) {
+func ExampleTestMinSubArraySum(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal([]string{"the number of odd elements 4n the str4ng 4 of the 4nput."}, OddCount([]string{"1234567"}))
-    assert.Equal([]string{"the number of odd elements 1n the str1ng 1 of the 1nput.", "the number of odd elements 8n the str8ng 8 of the 8nput."}, OddCount([]string{"3", "11111111"}))
+    assert.Equal(1, Minsubarraysum([]int{2, 3, 4, 1, 2, 4}))
+    assert.Equal(-6, Minsubarraysum([]int{-1, -2, -3}))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestOddCount(t)
+    ExampleTestMinsubarraysum(t)
 }
