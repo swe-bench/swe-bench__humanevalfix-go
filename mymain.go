@@ -4,37 +4,53 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
-import (
-    "math"
-)
 
-// Given the lengths of the three sides of a triangle. Return the area of
-// the triangle rounded to 2 decimal points if the three sides form a valid triangle.
-// Otherwise return -1
-// Three sides make a valid triangle when the sum of any two sides is greater
-// than the third side.
+// Write a function that returns true if the object q will fly, and false otherwise.
+// The object q will fly if it's balanced (it is a palindromic list) and the sum of its elements is less than or equal the maximum possible weight w.
+// 
 // Example:
-// TriangleArea(3, 4, 5) == 6.00
-// TriangleArea(1, 2, 10) == -1
-func TriangleArea(a float64, b float64, c float64) interface{} {
+// WillItFly([1, 2], 5) ➞ false
+// 1+2 is less than the maximum possible weight, but it's unbalanced.
+// 
+// WillItFly([3, 2, 3], 1) ➞ false
+// it's balanced, but 3+2+3 is more than the maximum possible weight.
+// 
+// WillItFly([3, 2, 3], 9) ➞ true
+// 3+2+3 is less than the maximum possible weight, and it's balanced.
+// 
+// WillItFly([3], 5) ➞ true
+// 3 is less than the maximum possible weight, and it's balanced.
+func WillItFly(q []int,w int) bool {
 
-    if a+b <= c || a+c <= b || b+c <= a {
-		return -1
+    sum := 0
+	for i := 0; i < len(q); i++ {
+		sum += q[i]
 	}
-	s := (a + b + c)
-	area := math.Pow(s * (s - a) * (s - b) * (s - c), 0.5)
-	area = math.Round(area*100)/100
-	return area
+	if sum <= w && isPalindrome(q) {
+		return true
+	}
+	return false
 }
 
-func ExampleTestTriangleArea(t *testing.T) {
+func isPalindrome(arr []int) bool {
+	for i := 0; i < (len(arr) / 2); i++ {
+		if arr[i] == arr[len(arr) - i - 1] {
+			return false
+		}
+	}
+	return true
+}
+
+func ExampleTestWillItFly(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal(6.00, TriangleArea(3, 4, 5))
-    assert.Equal(-1, TriangleArea(1, 2, 10))
+    assert.Equal(true, WillItFly([]int{3, 2, 3}, 9))
+    assert.Equal(false, WillItFly([]int{1, 2}, 5))
+    assert.Equal(true, WillItFly([]int{3}, 5))
+    assert.Equal(false, WillItFly([]int{3, 2, 3}, 1))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestTriangleArea(t)
+    ExampleTestWillItFly(t)
 }
