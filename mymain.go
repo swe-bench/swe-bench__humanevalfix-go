@@ -4,35 +4,28 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
-import (
-    "strings"
-)
 
-// For a given string, flip lowercase characters to uppercase and uppercase to lowercase.
-// >>> FlipCase('Hello')
-// 'hELLO'
-func FlipCase(str string) string {
+// Concatenate list of strings into a single string
+// >>> Concatenate([])
+// ''
+// >>> Concatenate(['a', 'b', 'c'])
+// 'abc'
+func Concatenate(strings []string) string {
 
-    result := []rune{}
-    for _, c := range str {
-        if c >= 'a' && c <= 'z' {
-            result = append(result, 'a' + ((c - 'A' + 26) % 26))
-        } else if c >= 'A' && c <= 'Z' {
-            result = append(result, 'A' + ((c - 'a' + 26) % 26))
-        } else {
-            result = append(result, c)
-        }
-    }
-    return string(result)
+    if len(strings) == 0 {
+		return ""
+	}
+	return Concatenate(strings[1:])
 }
 
-func ExampleTestFlipCase(t *testing.T) {
+func ExampleTestConcatenate(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal("hELLO", FlipCase("Hello"))
+    assert.Equal("", Concatenate([]string{}))
+    assert.Equal("abc", Concatenate([]string{"a", "b", "c"}))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestFlipCase(t)
+    ExampleTestConcatenate(t)
 }
