@@ -4,55 +4,45 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
+import (
+    "sort"
+)
 
-// There are eight planets in our solar system: the closerst to the Sun
-// is Mercury, the next one is Venus, then Earth, Mars, Jupiter, Saturn,
-// Uranus, Neptune.
-// Write a function that takes two planet names as strings planet1 and planet2.
-// The function should return a tuple containing all planets whose orbits are
-// located between the orbit of planet1 and the orbit of planet2, sorted by
-// the proximity to the sun.
-// The function should return an empty tuple if planet1 or planet2
-// are not correct planet names.
-// Examples
-// Bf("Jupiter", "Neptune") ==> ("Saturn", "Uranus")
-// Bf("Earth", "Mercury") ==> ("Venus")
-// Bf("Mercury", "Uranus") ==> ("Venus", "Earth", "Mars", "Jupiter", "Saturn")
-func Bf(planet1, planet2 string) []string {
+// Write a function that accepts a list of strings as a parameter,
+// deletes the strings that have odd lengths from it,
+// and returns the resulted list with a sorted order,
+// The list is always a list of strings and never an array of numbers,
+// and it may contain duplicates.
+// The order of the list should be ascending by length of each word, and you
+// should return the list sorted by that rule.
+// If two words have the same length, sort the list alphabetically.
+// The function should return a list of strings in sorted order.
+// You may assume that all words will have the same length.
+// For example:
+// assert list_sort(["aa", "a", "aaa"]) => ["aa"]
+// assert list_sort(["ab", "a", "aaa", "cd"]) => ["ab", "cd"]
+func SortedListSum(lst []string) []string {
 
-    planet_names := []string{"Mercury", "Venus", "Earth", "Mars", "Jupyter", "Saturn", "Uranus", "Neptune"}
-    pos1 := -1
-    pos2 := -1
-    for i, x := range planet_names {
-        if planet1 == x {
-            pos1 = i
-        }
-        if planet2 == x {
-            pos2 = i
+    sort.SliceStable(lst, func(i, j int) bool {
+        return lst[i] < lst[j]
+    })
+    new_lst := make([]string, 0)
+    for _, i := range lst {
+        if len(i)&1==0 {
+            new_lst = append(new_lst, i)
         }
     }
-    if pos1 == -1 || pos2 == -1 || pos1 == pos2 {
-        return []string{}
-    }
-    if pos1 < pos2 {
-        return planet_names[pos1 + 1: pos2]
-    }
-    return planet_names[pos2 + 1 : pos1]
+    return new_lst
 }
 
-func ExampleTestBf(t *testing.T) {
+func ExampleTestSortedListSum(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal([]string{"Saturn", "Uranus"}, Bf("Jupiter", "Neptune"))
-    assert.Equal([]string{"Venus"}, Bf("Earth", "Mercury"))
-    assert.Equal([]string{"Venus", "Earth", "Mars", "Jupiter", "Saturn"}, Bf("Mercury", "Uranus"))
-    assert.Equal([]string{"Earth", "Mars", "Jupiter", "Saturn", "Uranus"}, Bf("Neptune", "Venus"))
-    assert.Equal([]string{}, Bf("Earth", "Earth"))
-    assert.Equal([]string{}, Bf("Mars", "Earth"))
-    assert.Equal([]string{}, Bf("Jupiter", "Makemake"))
+    assert.Equal([]string{"aa"}, SortedListSum([]string{"aa", "a", "aaa"}))
+    assert.Equal([]string{"ab", "cd"}, SortedListSum([]string{"ab", "a", "aaa", "cd"}))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestBf(t)
+    ExampleTestSortedListSum(t)
 }
