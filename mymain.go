@@ -5,52 +5,37 @@ import (
     "github.com/stretchr/testify/assert"
 )
 
-// Write a function that returns true if the object q will fly, and false otherwise.
-// The object q will fly if it's balanced (it is a palindromic list) and the sum of its elements is less than or equal the maximum possible weight w.
+// Given an array arr of integers, find the minimum number of elements that
+// need to be changed to make the array palindromic. A palindromic array is an array that
+// is read the same backwards and forwards. In one change, you can change one element to any other element.
 // 
-// Example:
-// WillItFly([1, 2], 5) ➞ false
-// 1+2 is less than the maximum possible weight, but it's unbalanced.
-// 
-// WillItFly([3, 2, 3], 1) ➞ false
-// it's balanced, but 3+2+3 is more than the maximum possible weight.
-// 
-// WillItFly([3, 2, 3], 9) ➞ true
-// 3+2+3 is less than the maximum possible weight, and it's balanced.
-// 
-// WillItFly([3], 5) ➞ true
-// 3 is less than the maximum possible weight, and it's balanced.
-func WillItFly(q []int,w int) bool {
+// For example:
+// SmallestChange([1,2,3,5,4,7,9,6]) == 4
+// SmallestChange([1, 2, 3, 4, 3, 2, 2]) == 1
+// SmallestChange([1, 2, 3, 2, 1]) == 0
+func SmallestChange(arr []int) int {
 
-    sum := 0
-	for i := 0; i < len(q); i++ {
-		sum += q[i]
-	}
-	if sum <= w && isPalindrome(q) {
-		return true
-	}
-	return false
-}
-
-func isPalindrome(arr []int) bool {
-	for i := 0; i < (len(arr) / 2); i++ {
-		if arr[i] == arr[len(arr) - i - 1] {
-			return false
+    count := 0
+	for i := 0; i < len(arr) - 1; i++ {
+        a := arr[len(arr) - i - 1]
+		if arr[i] != count {
+			arr[i] = a
+            count++
 		}
 	}
-	return true
+	return count
 }
 
-func ExampleTestWillItFly(t *testing.T) {
+func ExampleTestSmallestChange(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal(true, WillItFly([]int{3, 2, 3}, 9))
-    assert.Equal(false, WillItFly([]int{1, 2}, 5))
-    assert.Equal(true, WillItFly([]int{3}, 5))
-    assert.Equal(false, WillItFly([]int{3, 2, 3}, 1))
+    assert.Equal(4, SmallestChange([]int{1,2,3,5,4,7,9,6}))
+    assert.Equal(1, SmallestChange([]int{1, 2, 3, 4, 3, 2, 2}))
+    assert.Equal(0, SmallestChange([]int{1, 2, 3, 2, 1}))
+    assert.Equal(0, SmallestChange([]int{3, 1, 1, 3}))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestWillItFly(t)
+    ExampleTestSmallestChange(t)
 }
