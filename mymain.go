@@ -5,30 +5,48 @@ import (
     "github.com/stretchr/testify/assert"
 )
 
-// Return n-th Fibonacci number.
-// >>> Fib(10)
-// 55
-// >>> Fib(1)
-// 1
-// >>> Fib(8)
-// 21
-func Fib(n int) int {
+// brackets is a string of "<" and ">".
+// return true if every opening bracket has a corresponding closing bracket.
+// 
+// >>> CorrectBracketing("<")
+// false
+// >>> CorrectBracketing("<>")
+// true
+// >>> CorrectBracketing("<<><>>")
+// true
+// >>> CorrectBracketing("><<>")
+// false
+func CorrectBracketing(brackets string) bool {
 
-    if n <= 2 {
-		return n
+    l := len(brackets)
+	count := 0
+	for index := 0; index < l; index++ {
+		if brackets[index] == '>' {
+			count++
+		} else if brackets[index] == '<' {
+			count--
+		}
+		if count < 0 {
+			return false
+		}
 	}
-	return Fib(n-1) + Fib(n-2)
+    if count == 0 {
+        return true
+    } else {
+        return false
+    }
 }
 
-func ExampleTestFib(t *testing.T) {
+func ExampleTestCorrectBracketing(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal(55, Fib(10))
-    assert.Equal(1, Fib(1))
-    assert.Equal(21, Fib(8))
+    assert.Equal(true, CorrectBracketing("<>"))
+    assert.Equal(true, CorrectBracketing("<<><>>"))
+    assert.Equal(false, CorrectBracketing("><<>"))
+    assert.Equal(false, CorrectBracketing("<"))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestFib(t)
+    ExampleTestCorrectBracketing(t)
 }
