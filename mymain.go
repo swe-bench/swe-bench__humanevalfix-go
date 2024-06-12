@@ -4,50 +4,52 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
+import (
+    "strings"
+)
 
-// Create a function that takes 3 numbers.
-// Returns true if one of the numbers is equal to the sum of the other two, and all numbers are integers.
-// Returns false in any other cases.
+// Write a function that takes a message, and Encodes in such a
+// way that it swaps case of all letters, replaces all vowels in
+// the message with the letter that appears 2 places ahead of that
+// vowel in the english alphabet.
+// Assume only letters.
 // 
-// Examples
-// AnyInt(5, 2, 7) ➞ true
-// 
-// AnyInt(3, 2, 2) ➞ false
-// 
-// AnyInt(3, -2, 1) ➞ true
-// 
-// AnyInt(3.6, -2.2, 2) ➞ false
-func AnyInt(x, y, z interface{}) bool {
+// Examples:
+// >>> Encode('test')
+// 'TGST'
+// >>> Encode('This is a message')
+// 'tHKS KS C MGSSCGG'
+func Encode(message string) string {
 
-    xx, ok := x.(int)
-    if !ok {
-        return false
+    vowels := "aeiou"
+    vowels_replace := make(map[rune]rune)
+    for _, c := range vowels {
+        vowels_replace[c] = c + 2
     }
-    yy, ok := y.(int)
-    if !ok {
-        return false
+    result := make([]rune, 0, len(message))
+    for _, c := range message {
+        if 'a' <= c && c <= 'z' {
+            c += 'A' - 'a'
+        } else if 'A' <= c && c <= 'Z' {
+            c += 'a' - 'A'
+        }
+        if strings.ContainsRune(vowels, c) {
+            result = append(result, vowels_replace[c])
+        } else {
+            result = append(result, c)
+        }
     }
-    zz, ok := z.(int)
-    if !ok {
-        return false
-    }
-
-    if (xx+yy == zz) || (yy+zz == xx) {
-        return true
-    }
-    return false
+    return string(result)
 }
 
-func ExampleTestAnyInt(t *testing.T) {
+func ExampleTestEncode(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal(true, AnyInt(5, 2, 7))
-    assert.Equal(false, AnyInt(3, 2, 2))
-    assert.Equal(true, AnyInt(3, -2, 1))
-    assert.Equal(false, AnyInt(3.6, -2.2, 2))
+    assert.Equal("TGST", Encode("test"))
+    assert.Equal("tHKS KS C MGSSCGG", Encode("This is a message"))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestAnyInt(t)
+    ExampleTestEncode(t)
 }
