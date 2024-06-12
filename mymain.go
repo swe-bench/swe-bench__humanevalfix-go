@@ -5,38 +5,52 @@ import (
     "github.com/stretchr/testify/assert"
 )
 import (
-    "strconv"
+    "sort"
 )
 
-// Given a non-empty array of integers arr and an integer k, return
-// the sum of the elements with at most two digits from the first k elements of arr.
+// Given a positive integer n, return a sorted list that has the odd numbers in collatz sequence.
 // 
-// Example:
+// The Collatz conjecture is a conjecture in mathematics that concerns a sequence defined
+// as follows: start with any positive integer n. Then each term is obtained from the
+// previous term as follows: if the previous term is even, the next term is one half of
+// the previous term. If the previous term is odd, the next term is 3 times the previous
+// term plus 1. The conjecture is that no matter what value of n, the sequence will always reach 1.
 // 
-// Input: arr = [111,21,3,4000,5,6,7,8,9], k = 4
-// Output: 24 # sum of 21 + 3
+// Note:
+// 1. Collatz(1) is [1].
+// 2. returned list sorted in increasing order.
 // 
-// Constraints:
-// 1. 1 <= len(arr) <= 100
-// 2. 1 <= k <= len(arr)
-func AddElements(arr []int, k int) int {
+// For example:
+// GetOddCollatz(5) returns [1, 5] # The collatz sequence for 5 is [5, 16, 8, 4, 2, 1], so the odd numbers are only 1, and 5.
+func GetOddCollatz(n int) []int {
 
-    sum := 0
-    for _, elem := range arr {
-        if len(strconv.Itoa(elem)) <= 2 {
-            sum += elem
+    odd_collatz := make([]int, 0)
+    if n&1==1 {
+        odd_collatz = append(odd_collatz, n)
+    }
+    for n > 1 {
+        if n &1==0 {
+            n>>=1
+        } else {
+            n = n*2 + 1
+        }            
+        if n&1 == 1 {
+            odd_collatz = append(odd_collatz, n)
         }
     }
-    return sum
+    sort.Slice(odd_collatz, func(i, j int) bool {
+        return odd_collatz[i] < odd_collatz[j]
+    })
+    return odd_collatz
 }
 
-func ExampleTestAddElements(t *testing.T) {
+func ExampleTestGetOddCollatz(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal(24, AddElements([]int{111,21,3,4000,5,6,7,8,9}, 4))
+    assert.Equal([]int{1, 5}, GetOddCollatz(5))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestAddElements(t)
+    ExampleTestGetOddCollatz(t)
 }
