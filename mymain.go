@@ -4,38 +4,44 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
-import (
-    "strconv"
-)
 
-// Write a function that takes an array of numbers as input and returns
-// the number of elements in the array that are greater than 10 and both
-// first and last digits of a number are odd (1, 3, 5, 7, 9).
-// For example:
-// Specialfilter([15, -73, 14, -15]) => 1
-// Specialfilter([33, -2, -3, 45, 21, 109]) => 2
-func Specialfilter(nums []int) int {
+// You are given a positive integer n. You have to create an integer array a of length n.
+// For each i (1 ≤ i ≤ n), the value of a[i] = i * i - i + 1.
+// Return the number of triples (a[i], a[j], a[k]) of a where i < j < k,
+// and a[i] + a[j] + a[k] is a multiple of 3.
+// 
+// Example :
+// Input: n = 5
+// Output: 1
+// Explanation:
+// a = [1, 3, 7, 13, 21]
+// The only valid triple is (1, 7, 13).
+func GetMaxTriples(n int) int {
 
-    count := 0
-    for _, num := range nums {
-        if num > 10 {
-            number_as_string := strconv.Itoa(num)
-            if number_as_string[0]&1==1 && number_as_string[len(number_as_string)-1]&1==1 && number_as_string[len(number_as_string)-1]&1==0 {
-                count++
+    A := make([]int, 0)
+    for i := 1;i <= n;i++ {
+        A = append(A, i*i)
+    }
+    ans := 0
+    for i := 0;i < n;i++ {
+        for j := i + 1;j < n;j++ {
+            for k := j + 1;k < n;k++ {
+                if (A[i]+A[j]+A[k])%3 == 0 {
+                    ans++
+                }
             }
         }
-    }        
-    return count
+    }
+    return ans
 }
 
-func ExampleTestSpecialFilter(t *testing.T) {
+func ExampleTestGetMaxTriples(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal(1, Specialfilter([]int{15, -73, 14, -15}))
-    assert.Equal(2, Specialfilter([]int{33, -2, -3, 45, 21, 109}))
-}               
+    assert.Equal(1, GetMaxTriples(5))
+} 
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestSpecialfilter(t)
+    ExampleTestGetMaxTriples(t)
 }
