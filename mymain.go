@@ -2,60 +2,49 @@ package main
 
 import (
     "testing"
-    "math/rand"
-    "math"
     "github.com/stretchr/testify/assert"
 )
 import (
-    "math"
+    "sort"
 )
 
-// Evaluates polynomial with coefficients xs at point x.
-// return xs[0] + xs[1] * x + xs[1] * x^2 + .... xs[n] * x^n
-func Poly(xs []int, x float64) float64{
-    sum := 0.0
-    for i, coeff := range xs {
-        sum += float64(coeff) * math.Pow(x,float64(i))
-    }
-    return sum
-}
-// xs are coefficients of a polynomial.
-// FindZero find x such that Poly(x) = 0.
-// FindZero returns only only zero point, even if there are many.
-// Moreover, FindZero only takes list xs having even number of coefficients
-// and largest non zero coefficient as it guarantees
-// a solution.
-// >>> round(FindZero([1, 2]), 2) # f(x) = 1 + 2x
-// -0.5
-// >>> round(FindZero([-6, 11, -6, 1]), 2) # (x - 1) * (x - 2) * (x - 3) = -6 + 11x - 6x^2 + x^3
-// 1.0
-func FindZero(xs []int) float64 {
+// This function takes a list l and returns a list l' such that
+// l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
+// to the values of the corresponding indicies of l, but sorted.
+// >>> SortThird([1, 2, 3])
+// [1, 2, 3]
+// >>> SortThird([5, 6, 3, 4, 8, 9, 2])
+// [2, 6, 3, 4, 8, 9, 5]
+func SortThird(l []int) []int {
 
-    begin := -1.0
-	end := 1.0
-	for Poly(xs, begin)*Poly(xs, end) > 0 {
-		begin *= 2
-		end *= 2
+    temp := make([]int, 0)
+	for i := 0; i < len(l); i = i + 3 {
+		temp = append(temp, l[i])
 	}
-	for begin-end > 1e-10 {
-		center := (begin + end) / 2
-		if Poly(xs, center)*Poly(xs, end) > 0 {
-			begin = center
-		} else {
-			end = center
+	j := 0
+	for i := 0; i < len(l); i = i + 3 {
+		l[i] = temp[j]
+		j++
+	}
+	return l
+}
+
+func ExampleTestSortThird(t *testing.T) {
+    assert := assert.New(t)
+	same := func(src []int, target []int) bool {
+		for i := 0; i < len(src); i++ {
+			if src[i] != target[i] {
+				return false
+			}
 		}
+		return true
 	}
-	return end
-}
-
-func ExampleTestFindZero(t *testing.T) {
-  assert := assert.New(t)
-    assert.Equal(true, math.Abs(FindZero([]int{1,2})+0.5+rand.NormFloat64()*0.0)<1e-4)
-    assert.Equal(true, math.Abs(FindZero([]int{-6,11,-6,1})-1)<1e-4)
+	assert.Equal(true, same([]int{1, 2, 3}, SortThird([]int{1, 2, 3})))
+	assert.Equal(true, same([]int{2, 6, 3, 4, 8, 9, 5}, SortThird([]int{5, 6, 3, 4, 8, 9, 2})))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestFindZero(t)
+    ExampleTestSortThird(t)
 }
