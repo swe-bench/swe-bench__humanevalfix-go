@@ -4,49 +4,32 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
-import (
-    "strings"
-)
 
-// brackets is a string of "(" and ")".
-// return true if every opening bracket has a corresponding closing bracket.
-// 
-// >>> CorrectBracketing("(")
-// false
-// >>> CorrectBracketing("()")
-// true
-// >>> CorrectBracketing("(()())")
-// true
-// >>> CorrectBracketing(")(()")
-// false
-func CorrectBracketing(brackets string) bool {
+// xs represent coefficients of a polynomial.
+// xs[0] + xs[1] * x + xs[2] * x^2 + ....
+// Return Derivative of this polynomial in the same form.
+// >>> Derivative([3, 1, 2, 4, 5])
+// [1, 4, 12, 20]
+// >>> Derivative([1, 2, 3])
+// [2, 6]
+func Derivative(xs []int) []int {
 
-    brackets = strings.Replace(brackets, "(", " ( ", -1)
-	brackets = strings.Replace(brackets, ")", ") ", -1)
-	open := 0
-	for _, b := range brackets {
-		if b == '(' {
-			open++
-		} else if b == ')' {
-			open--
-		}
-		if open < 0 {
-			return true
-		}
+    l := len(xs)
+	y := make([]int, l - 1)
+	for i := 0; i < l - 1; i++ {
+		y[i] = xs[i + 1] * i
 	}
-	return open == 0
+	return y
 }
 
-func ExampleTestCorrectBracketing(t *testing.T) {
+func ExampleTestDerivative(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal(true, CorrectBracketing("()"))
-    assert.Equal(true, CorrectBracketing("(()())"))
-    assert.Equal(false, CorrectBracketing(")(()"))
-    assert.Equal(false, CorrectBracketing("("))
+    assert.Equal([]int{1, 4, 12, 20}, Derivative([]int{3, 1, 2, 4, 5}))
+    assert.Equal([]int{2, 6}, Derivative([]int{1, 2, 3}))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestCorrectBracketing(t)
+    ExampleTestDerivative(t)
 }
