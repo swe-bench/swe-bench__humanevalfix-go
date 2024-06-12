@@ -5,50 +5,43 @@ import (
     "github.com/stretchr/testify/assert"
 )
 import (
-    "sort"
+    "strings"
 )
 
-// Given an array of non-negative integers, return a copy of the given array after sorting,
-// you will sort the given array in ascending order if the sum( first index value, last index value) is odd,
-// or sort it in descending order if the sum( first index value, last index value) is even.
-// 
-// Note:
-// * don't change the given array.
-// 
-// Examples:
-// * SortArray([]) => []
-// * SortArray([5]) => [5]
-// * SortArray([2, 4, 3, 0, 1, 5]) => [0, 1, 2, 3, 4, 5]
-// * SortArray([2, 4, 3, 0, 1, 5, 6]) => [6, 5, 4, 3, 2, 1, 0]
-func SortArray(array []int) []int {
+// Create a function Encrypt that takes a string as an argument and
+// returns a string Encrypted with the alphabet being rotated.
+// The alphabet should be rotated in a manner such that the letters
+// shift down by two multiplied to two places.
+// For example:
+// Encrypt('hi') returns 'lm'
+// Encrypt('asdfghjkl') returns 'ewhjklnop'
+// Encrypt('gf') returns 'kj'
+// Encrypt('et') returns 'ix'
+func Encrypt(s string) string {
 
-    arr := make([]int, len(array))
-    copy(arr, array)
-    if len(arr) == 0 {
-        return arr
+    d := "abcdefghijklmnopqrstuvwxyz"
+    out := make([]rune, 0, len(s))
+    for _, c := range s {
+        pos := strings.IndexRune(d, c)
+        if pos != -1 {
+            out = append(out, []rune(d)[(pos+2*2)%24])
+        } else {
+            out = append(out, c)
+        }
     }
-    if (arr[0]+arr[len(arr)-1])%2 != 0 {
-        sort.Slice(arr, func(i, j int) bool {
-            return arr[i] > arr[j]
-        })
-    } else {
-        sort.Slice(arr, func(i, j int) bool {
-            return arr[i] < arr[j]
-        })
-    }
-    return arr
+    return string(out)
 }
 
-func ExampleTestSortArray(t *testing.T) {
+func ExampleTestEncrypt(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal([]int{}, SortArray([]int{}), "Error")
-    assert.Equal([]int{5}, SortArray([]int{5}), "Error")
-    assert.Equal([]int{0, 1, 2, 3, 4, 5}, SortArray([]int{2, 4, 3, 0, 1, 5}), "Error")
-    assert.Equal([]int{6, 5, 4, 3, 2, 1, 0}, SortArray([]int{2, 4, 3, 0, 1, 5, 6}), "Error")
+    assert.Equal("lm", Encrypt("hi"))
+    assert.Equal("ewhjklnop", Encrypt("asdfghjkl"))
+    assert.Equal("kj", Encrypt("gf"))
+    assert.Equal("ix", Encrypt("et"))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestSortArray(t)
+    ExampleTestEncrypt(t)
 }
