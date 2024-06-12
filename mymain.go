@@ -4,29 +4,43 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
+import (
+    "sort"
+    "strings"
+)
 
-// Given a non-empty list of integers lst. Add the even elements that are at odd indices..
+// Write a function that takes a string and returns an ordered version of it.
+// Ordered version of string, is a string where all words (separated by space)
+// are replaced by a new word where all the characters arranged in
+// ascending order based on ascii value.
+// Note: You should keep the order of words and blank spaces in the sentence.
 // 
-// Examples:
-// Add([4, 2, 6, 7]) ==> 2
-func Add(lst []int) int {
+// For example:
+// AntiShuffle('Hi') returns 'Hi'
+// AntiShuffle('hello') returns 'ehllo'
+// AntiShuffle('Hello World!!!') returns 'Hello !!!Wdlor'
+func AntiShuffle(s string) string {
 
-    sum := 0
-    for i := 1; i < len(lst); i += 1 {
-        if lst[i]%2 == 0 {
-            sum += lst[i]
-        }
+    strs := make([]string, 0)
+    for _, i := range strings.Fields(s) {
+        word := []rune(i)
+        sort.Slice(word, func(i, j int) bool {
+            return word[i] < word[j]
+        })
+        strs = append(strs, string(word))
     }
-    return sum
+    return strings.Join(strs, "")
 }
 
-func ExampleTestAdd(t *testing.T) {
+func ExampleTestAntiShuffle(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal(2, Add([]int{4, 2, 6, 7}))
+    assert.Equal("Hi", AntiShuffle("Hi"))
+    assert.Equal("ehllo", AntiShuffle("hello"))
+    assert.Equal("Hello !!!Wdlor", AntiShuffle("Hello World!!!"))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestAdd(t)
+    ExampleTestAntiShuffle(t)
 }
