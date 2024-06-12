@@ -5,53 +5,64 @@ import (
     "github.com/stretchr/testify/assert"
 )
 
-// Given a list of numbers, return whether or not they are sorted
-// in ascending order. If list has more than 1 duplicate of the same
-// number, return false. Assume no negative numbers and only integers.
+// You are given two intervals,
+// where each interval is a pair of integers. For example, interval = (start, end) = (1, 2).
+// The given intervals are closed which means that the interval (start, end)
+// includes both start and end.
+// For each given interval, it is assumed that its start is less or equal its end.
+// Your task is to determine whether the length of Intersection of these two
+// intervals is a prime number.
+// Example, the Intersection of the intervals (1, 3), (2, 4) is (2, 3)
+// which its length is 1, which not a prime number.
+// If the length of the Intersection is a prime number, return "YES",
+// otherwise, return "NO".
+// If the two intervals don't intersect, return "NO".
 // 
-// Examples
-// IsSorted([5]) ➞ true
-// IsSorted([1, 2, 3, 4, 5]) ➞ true
-// IsSorted([1, 3, 2, 4, 5]) ➞ false
-// IsSorted([1, 2, 3, 4, 5, 6]) ➞ true
-// IsSorted([1, 2, 3, 4, 5, 6, 7]) ➞ true
-// IsSorted([1, 3, 2, 4, 5, 6, 7]) ➞ false
-// IsSorted([1, 2, 2, 3, 3, 4]) ➞ true
-// IsSorted([1, 2, 2, 2, 3, 4]) ➞ false
-func IsSorted(lst []int) bool {
+// 
+// [input/output] samples:
+// Intersection((1, 2), (2, 3)) ==> "NO"
+// Intersection((-1, 1), (0, 4)) ==> "NO"
+// Intersection((-3, -1), (-5, 5)) ==> "YES"
+func Intersection(interval1 [2]int, interval2 [2]int) string {
 
-    count_digit := make(map[int]int)
-    for _, i := range lst {
-        count_digit[i] = 0
-    }
-    for _, i := range lst {
-        if count_digit[i] > 2 {
+    is_prime := func(num int) bool {
+        if num == 1 || num == 0 {
             return false
         }
-    }
-    for i := 1;i < len(lst);i++ {
-        if lst[i-1] > lst[i] {
-            return false
+        if num == 2 {
+            return true
         }
+        for i := 2;i < num;i++ {
+            if num%i == 0 {
+                return false
+            }
+        }
+        return true
     }
-    return true
+    l := interval1[0]
+    if interval2[0] > l {
+        l = interval2[0]
+    }
+    r := interval1[1]
+    if interval2[1] < r {
+        r = interval2[1]
+    }
+    length := r - l
+    if length > 0 {
+        return "YES"
+    }
+    return "NO"
 }
-    
 
-func ExampleTestIsSorted(t *testing.T) {
+func ExampleTestIntersection(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal(true, IsSorted([]int{5}))
-    assert.Equal(true, IsSorted([]int{1, 2, 3, 4, 5}))
-    assert.Equal(false, IsSorted([]int{1, 3, 2, 4, 5}))
-    assert.Equal(true, IsSorted([]int{1, 2, 3, 4, 5, 6}))
-    assert.Equal(true, IsSorted([]int{1, 2, 3, 4, 5, 6, 7}))
-    assert.Equal(false, IsSorted([]int{1, 3, 2, 4, 5, 6, 7}))
-    assert.Equal(false, IsSorted([]int{1, 2, 2, 2, 3, 4}))
-    assert.Equal(true, IsSorted([]int{1, 2, 2, 3, 3, 4}))
+    assert.Equal("NO", Intersection([2]int{1, 2}, [2]int{2, 3}))
+    assert.Equal("NO", Intersection([2]int{-1, 1}, [2]int{0, 4}))
+    assert.Equal("YES", Intersection([2]int{-3, -1}, [2]int{-5, 5}))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestIsSorted(t)
+    ExampleTestIntersection(t)
 }
