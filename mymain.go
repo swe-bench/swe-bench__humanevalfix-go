@@ -5,35 +5,43 @@ import (
     "github.com/stretchr/testify/assert"
 )
 
-// Circular shift the digits of the integer x, shift the digits right by shift
-// and return the result as a string.
-// If shift > number of digits, return digits reversed.
-// >>> CircularShift(12, 1)
-// "21"
-// >>> CircularShift(12, 2)
-// "12"
-func CircularShift(x int,shift int) string {
+// Task
+// Write a function that takes a string as input and returns the sum of the upper characters only'
+// ASCII codes.
+// 
+// Examples:
+// Digitsum("") => 0
+// Digitsum("abAB") => 131
+// Digitsum("abcCd") => 67
+// Digitsum("helloE") => 69
+// Digitsum("woArBld") => 131
+// Digitsum("aAaaaXa") => 153
+func Digitsum(x string) int {
 
-    s := strconv.Itoa(x)
-	if shift > len(s) {
-		runes := make([]rune, 0)
-		for i := len(s)-1; i >= 0; i-- {
-			runes = append(runes, rune(s[i]))
-		}
-		return string(runes)
-	}else{
-		return s[:len(s)-shift]+s[len(s)-shift:]
+    if len(x) == 0 {
+		return 0
 	}
+	result := 0
+	for _, i := range x {
+		if 'a' <= i && i <= 'z' {
+			result += int(i)
+		}
+	}
+	return result
 }
 
-func ExampleTestCircularShift(t *testing.T) {
+func ExampleTestDigitSum(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal("12", CircularShift(12, 2))
-    assert.Equal("21", CircularShift(12, 1))
+    assert.Equal(0, Digitsum(""))
+    assert.Equal(131, Digitsum("abAB"))
+    assert.Equal(67, Digitsum("abcCd"))
+    assert.Equal(69, Digitsum("helloE"))
+    assert.Equal(131, Digitsum("woArBld"))
+    assert.Equal(153, Digitsum("aAaaaXa"))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestCircularShift(t)
+    ExampleTestDigitsum(t)
 }
