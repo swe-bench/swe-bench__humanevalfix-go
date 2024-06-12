@@ -5,49 +5,30 @@ import (
     "github.com/stretchr/testify/assert"
 )
 
-// Check if two words have the same characters.
-// >>> SameChars('eabcdzzzz', 'dddzzzzzzzddeddabc')
-// true
-// >>> SameChars('abcd', 'dddddddabc')
-// true
-// >>> SameChars('dddddddabc', 'abcd')
-// true
-// >>> SameChars('eabcd', 'dddddddabc')
-// false
-// >>> SameChars('abcd', 'dddddddabce')
-// false
-// >>> SameChars('eabcdzzzz', 'dddzzzzzzzddddabc')
-// false
-func SameChars(s0 string, s1 string) bool {
+// Return n-th Fibonacci number.
+// >>> Fib(10)
+// 55
+// >>> Fib(1)
+// 1
+// >>> Fib(8)
+// 21
+func Fib(n int) int {
 
-    set0 := make(map[int32]interface{})
-	set1 := make(map[int32]interface{})
-	for _, i := range s0 {
-		set0[i] = nil
+    if n <= 2 {
+		return n
 	}
-	for _, i := range s1 {
-		set1[i] = nil
-	}
-	for i, _ := range set0 {
-		if _,ok:=set1[i];!ok{
-			return false
-		}
-	}
-	return true
+	return Fib(n-1) + Fib(n-2)
 }
 
-func ExampleTestSameChars(t *testing.T) {
+func ExampleTestFib(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal(true, SameChars("eabcdzzzz", "dddzzzzzzzddeddabc"))
-    assert.Equal(true, SameChars("abcd", "dddddddabc"))
-    assert.Equal(true, SameChars("dddddddabc", "abcd"))
-    assert.Equal(false, SameChars("eabcd", "dddddddabc"))
-    assert.Equal(false, SameChars("abcd", "dddddddabcf"))
-    assert.Equal(false, SameChars("eabcdzzzz", "dddzzzzzzzddddabc"))
+    assert.Equal(55, Fib(10))
+    assert.Equal(1, Fib(1))
+    assert.Equal(21, Fib(8))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestSameChars(t)
+    ExampleTestFib(t)
 }
