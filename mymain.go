@@ -5,41 +5,73 @@ import (
     "github.com/stretchr/testify/assert"
 )
 
-// You are given a string s.
-// Your task is to check if the string is happy or not.
-// A string is happy if its length is at least 3 and every 3 consecutive letters are distinct
-// For example:
-// IsHappy(a) => false
-// IsHappy(aa) => false
-// IsHappy(abcd) => true
-// IsHappy(aabb) => false
-// IsHappy(adb) => true
-// IsHappy(xyy) => false
-func IsHappy(s string) bool {
+// It is the last week of the semester and the teacher has to give the grades
+// to students. The teacher has been making her own algorithm for grading.
+// The only problem is, she has lost the code she used for grading.
+// She has given you a list of GPAs for some students and you have to write
+// a function that can output a list of letter grades using the following table:
+// GPA       |    Letter grade
+// 4.0                A+
+// > 3.7                A
+// > 3.3                A-
+// > 3.0                B+
+// > 2.7                B
+// > 2.3                B-
+// > 2.0                C+
+// > 1.7                C
+// > 1.3                C-
+// > 1.0                D+
+// > 0.7                D
+// > 0.0                D-
+// 0.0                E
+// 
+// 
+// Example:
+// grade_equation([4.0, 3, 1.7, 2, 3.5]) ==> ["A+", "B", "C-", "C", "A-"]
+func NumericalLetterGrade(grades []float64) []string {
 
-    if len(s) < 3 {
-        return false
-    }
-    for i := 0; i < len(s)-2; i++ {
-        if s[i] == s[i+1] && s[i+1] == s[i+2] && s[i] == s[i+2] {
-            return false
+letter_grade := make([]string, 0, len(grades))
+    for _, gpa := range grades {
+        switch {
+        case gpa == 4.0:
+            letter_grade = append(letter_grade, "A+")
+        case gpa > 3.7:
+            letter_grade = append(letter_grade, "A")
+        case gpa > 3.3:
+            letter_grade = append(letter_grade, "A-")
+        case gpa > 3.0:
+            letter_grade = append(letter_grade, "B+")
+        case gpa > 2.7:
+            letter_grade = append(letter_grade, "B")
+        case gpa > 2.3:
+            letter_grade = append(letter_grade, "B-")
+        case gpa > 2.0:
+            letter_grade = append(letter_grade, "C+")
+        case gpa > 1.7:
+            letter_grade = append(letter_grade, "C")
+        case gpa > 1.3:
+            letter_grade = append(letter_grade, "C-")
+        case gpa > 1.0:
+            letter_grade = append(letter_grade, "D+")
+        case gpa > 0.7:
+            letter_grade = append(letter_grade, "D")
+        case gpa > 0.0:
+            letter_grade = append(letter_grade, "D-")
+        default:
+            letter_grade = append(letter_grade, "E+")
         }
+
     }
-    return true
+    return letter_grade
 }
 
-func ExampleTestIsHappy(t *testing.T) {
+func ExampleTestNumericalLetterGrade(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal(false, IsHappy("a"), "a")
-    assert.Equal(false, IsHappy("aa"), "aa")
-    assert.Equal(true, IsHappy("abcd"), "abcd")
-    assert.Equal(false, IsHappy("aabb"), "aabb")
-    assert.Equal(true, IsHappy("adb"), "adb")
-    assert.Equal(false, IsHappy("xyy"), "xyy")
+    assert.Equal([]string{"A+", "B", "C-", "C", "A-"}, NumericalLetterGrade([]float64{4.0, 3, 1.7, 2, 3.5}))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestIsHappy(t)
+    ExampleTestNumericalLetterGrade(t)
 }
