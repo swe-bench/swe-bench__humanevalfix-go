@@ -5,37 +5,45 @@ import (
     "github.com/stretchr/testify/assert"
 )
 import (
-    "strconv"
+    "strings"
 )
 
-// Given an integer. return a tuple that has the number of even and odd digits respectively.
+// Given a positive integer, obtain its roman numeral equivalent as a string,
+// and return it in lowercase.
+// Restrictions: 1 <= num <= 1000
 // 
-// Example:
-// EvenOddCount(-12) ==> (1, 1)
-// EvenOddCount(123) ==> (1, 2)
-func EvenOddCount(num int) [2]int {
+// Examples:
+// >>> IntToMiniRoman(19) == 'xix'
+// >>> IntToMiniRoman(152) == 'clii'
+// >>> IntToMiniRoman(426) == 'cdxxvi'
+func IntToMiniRoman(number int) string {
 
-    even_count := 0
-    odd_count := 0
-    if num < 0 {
-        num = -num
-    }
-    for _, r := range strconv.Itoa(num) {
-        if r&1==0 {
-            even_count++
+    num := []int{1, 4, 5, 9, 10, 40, 50, 90,  
+           100, 400, 500, 900, 1000}
+    sym := []string{"I", "IV", "V", "IX", "X", "XL",  
+           "L", "XC", "C", "CD", "D", "CM", "M"}
+    i := 12
+    res := ""
+    for number != 0 {
+        div := number / num[i] 
+        for div != 0 {
+            res += sym[i] 
+            div--
         }
+        i--
     }
-    return [2]int{even_count, odd_count}
+    return strings.ToLower(res)
 }
 
-func ExampleTestEvenOddCount(t *testing.T) {
+func ExampleTestIntToMiniRoman(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal([2]int{1, 1}, EvenOddCount(-12))
-    assert.Equal([2]int{1, 2}, EvenOddCount(123))
+    assert.Equal("xix", IntToMiniRoman(19))
+    assert.Equal("clii", IntToMiniRoman(152))
+    assert.Equal("cdxxvi", IntToMiniRoman(426))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestEvenOddCount(t)
+    ExampleTestIntToMiniRoman(t)
 }
