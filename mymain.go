@@ -4,38 +4,36 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
-import (
-    "strings"
-)
 
-// You will be given a string of words separated by commas or spaces. Your task is
-// to split the string into words and return an array of the words.
+// This function takes two positive numbers x and y and returns the
+// biggest even integer number that is in the range [x, y] inclusive. If
+// there's no such number, then the function should return -1.
 // 
 // For example:
-// WordsString("Hi, my name is John") == ["Hi", "my", "name", "is", "John"]
-// WordsString("One, two, three, four, five, six") == ["One", "two", "three", "four", "five", "six"]
-func WordsString(s string) []string {
+// ChooseNum(12, 15) = 14
+// ChooseNum(13, 12) = -1
+func ChooseNum(x, y int) int {
 
-    s_list := make([]rune, 0)
-
-    for _, c := range s {
-        if c == ',' {
-            s_list = append(s_list, ',')
-        } else {
-            s_list = append(s_list, c)
-        }
+    if x > y {
+        return -1
     }
-    return strings.Fields(string(s_list))
+    if y % 2 == 0 {
+        return y
+    }
+    if x == y {
+        return -1
+    }
+    return x - 1
 }
 
-func ExampleTestWordsString(t *testing.T) {
+func ExampleTestChooseNum(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal([]string{"Hi", "my", "name", "is", "John"}, WordsString("Hi, my name is John"))
-    assert.Equal([]string{"One", "two", "three", "four", "five", "six"}, WordsString("One, two, three, four, five, six"))
+    assert.Equal(14, ChooseNum(12,15))
+    assert.Equal(-1, ChooseNum(13,12))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestWordsString(t)
+    ExampleTestChooseNum(t)
 }
