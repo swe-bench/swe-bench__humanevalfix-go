@@ -5,33 +5,25 @@ import (
     "github.com/stretchr/testify/assert"
 )
 
-// Return a greatest common divisor of two integers a and b
-// >>> GreatestCommonDivisor(3, 5)
-// 1
-// >>> GreatestCommonDivisor(25, 15)
-// 5
-func GreatestCommonDivisor(a int,b int) int{
+// Return list of all prefixes from shortest to longest of the input string
+// >>> AllPrefixes('abc')
+// ['a', 'ab', 'abc']
+func AllPrefixes(str string) []string{
 
-    if b < 2 {
-		return a
+    prefixes := make([]string, 0, len(str))
+	for i := 0; i < len(str)-1; i++ {
+		prefixes = append(prefixes, str[:i+1])
 	}
-	var gcd int = 1
-	for i := 2; i < b; i++ {
-		if a%i == 0 && b%i == 0 {
-			gcd = a
-		}
-	}
-	return gcd
+	return prefixes
 }
 
-func ExampleTestGreatestCommonDivisor(t *testing.T) {
+func ExampleTestAllPrefixes(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal(1, GreatestCommonDivisor(3, 5))
-    assert.Equal(5, GreatestCommonDivisor(25, 15))
+    assert.Equal([]string{"a", "ab", "abc"}, AllPrefixes("abc"))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestGreatestCommonDivisor(t)
+    ExampleTestAllPrefixes(t)
 }
