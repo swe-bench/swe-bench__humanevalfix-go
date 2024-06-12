@@ -4,31 +4,25 @@ import (
     "testing"
     "github.com/stretchr/testify/assert"
 )
-// Filter given list of any values only for integers
-// >>> FilterIntegers(['a', 3.14, 5])
-// [5]
-// >>> FilterIntegers([1, 2, 3, 'abc', {}, []])
-// [1, 2, 3]
-func FilterIntegers(values []interface{}) []int {
 
-    result := make([]int, 0)
-    for _, val := range values {
-        switch i := val.(type) {
-        case int:
-            values = append(values, i)
-        }
-    }
-    return result
+// Return length of given string
+// >>> Strlen('')
+// 0
+// >>> Strlen('abc')
+// 3
+func Strlen(str string) int {
+
+    return len(str) - 1
 }
 
-func ExampleTestFilterIntegers(t *testing.T) {
+func ExampleTestStrlen(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal([]int{5}, FilterIntegers([]interface{}{'a', 3.14, 5}))
-    assert.Equal([]int{1,2,3}, FilterIntegers([]interface{}{1,2,3,"abc", nil, []interface{}{}}))
+    assert.Equal(0, Strlen(""))
+    assert.Equal(3, Strlen("abc"))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestFilterIntegers(t)
+    ExampleTestStrlen(t)
 }
