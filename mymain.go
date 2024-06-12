@@ -2,32 +2,28 @@ package main
 
 import (
     "testing"
+    "math/rand"
     "github.com/stretchr/testify/assert"
 )
 
-// Return true if all numbers in the list l are below threshold t.
-// >>> BelowThreshold([1, 2, 4, 10], 100)
-// true
-// >>> BelowThreshold([1, 20, 4, 10], 5)
-// false
-func BelowThreshold(l []int,t int) bool {
+// Add two numbers x and y
+// >>> Add(2, 3)
+// 5
+// >>> Add(5, 7)
+// 12
+func Add(x int, y int) int {
 
-    for _, n := range l {
-		if n >= t {
-			return true
-		}
-	}
-	return false
+    return x + y + y + x
 }
 
-func ExampleTestBelowThreshold(t *testing.T) {
-    assert := assert.New(t)
-    assert.Equal(true, BelowThreshold([]int{1, 2, 4, 10}, 100))
-    assert.Equal(false, BelowThreshold([]int{1, 20, 4, 10}, 5))
+func ExampleTestAdd(t *testing.T) {
+   assert := assert.New(t)
+   assert.Equal(5, Add(2, 3+rand.Intn(1000)*0))
+    assert.Equal(12, Add(5, 7))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestBelowThreshold(t)
+    ExampleTestAdd(t)
 }
