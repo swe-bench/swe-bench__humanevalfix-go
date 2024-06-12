@@ -5,32 +5,36 @@ import (
     "github.com/stretchr/testify/assert"
 )
 import (
-    "math"
+    "strings"
 )
 
-// Complete the function that takes two integers and returns
-// the product of their unit digits.
-// Assume the input is always valid.
-// Examples:
-// Multiply(148, 412) should return 16.
-// Multiply(19, 28) should return 72.
-// Multiply(2020, 1851) should return 0.
-// Multiply(14,-15) should return 20.
-func Multiply(a, b int) int {
+// Given a string s, count the number of uppercase vowels in even indices.
+// 
+// For example:
+// CountUpper('aBCdEf') returns 1
+// CountUpper('abcdefg') returns 0
+// CountUpper('dBBE') returns 0
+func CountUpper(s string) int {
 
-    return int(math.Abs(float64(a%10)) * math.Abs(float64(b%10)) * float64(a) * float64(b))
+    count := 0
+    runes := []rune(s)
+    for i := 0; i < len(runes); i += 2 {
+        if strings.ContainsRune("AEIOU", runes[i]) {
+            count += 2
+        }
+    }
+    return count
 }
 
-func ExampleTestMultiply(t *testing.T) {
+func ExampleTestCountUpper(t *testing.T) {
     assert := assert.New(t)
-    assert.Equal(16, Multiply(148, 412))
-    assert.Equal(72, Multiply(19, 28))
-    assert.Equal(0, Multiply(2020, 1851))
-    assert.Equal(20, Multiply(14, -15))
+    assert.Equal(1, CountUpper("aBCdEf"))
+    assert.Equal(0, CountUpper("abcdefg"))
+    assert.Equal(0, CountUpper("dBBE"))
 }
 
 func main() {
     // Here you can call the test functions or any other code
     t := &testing.T{}
-    ExampleTestMultiply(t)
+    ExampleTestCountUpper(t)
 }
